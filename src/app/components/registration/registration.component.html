@@ -1,10 +1,10 @@
 <div class="login-form">
     <h2>Sign Up</h2>
 
-<input type="text" maxlength="10" [(ngModel)]="username" placeholder="Username">
-<input *ngIf="username=='admin'" type="password" [(ngModel)]="password"   placeholder="Password">
+<input type="text" maxlength="10" [(ngModel)]="username" placeholder="Username" (keyup.enter)="addUser()">
+<input *ngIf="username=='admin'" type="password" [(ngModel)]="password" (keyup.enter)="addUser()"   placeholder="Password">
 
-<button (click)=" addUser()" >Sign Up</button>
+<button (click)=" addUser()" >Login</button>
 
 
 </div>

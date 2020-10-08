@@ -7,7 +7,7 @@
           <input type="number" [(ngModel)]="value">
           <br>
           <label for="">Coins:</label>
-          <input type="number" [(ngModel)]="coins" >
+          <input type="number" [(ngModel)]="coins" (keyup.enter)="Pay()">
           
           <button  (click)="Pay()">Payment</button>
           <br>

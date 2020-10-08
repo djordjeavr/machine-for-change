@@ -3,7 +3,7 @@
     <div class="basicInformation">
         <h4>Add Coins</h4>
         <label for="">Value:</label>
-        <input type="number" [(ngModel)]="valueOfPayment">   
+        <input type="number" [(ngModel)]="valueOfPayment" (keyup.enter)="ChangeValueOfPayment()">   
         <br>
         <p>Value of payment: <span>{{value}}</span></p>
         <br>
@@ -16,7 +16,7 @@
         <input type="number" [(ngModel)]="values.value" >
         <br>
         <label for="">Coins:</label>
-        <input type="number" [(ngModel)]="values.coins">
+        <input type="number" [(ngModel)]="values.coins" (keyup.enter)="AddValue()">
         <button (click)="AddValue()">Add coins</button>
     </div>  
     <p>Machine state: <span *ngFor="let item of machineState">(value:{{item.value}},coins:{{item.coins}}),</span></p>
