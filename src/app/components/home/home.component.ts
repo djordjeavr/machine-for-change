@@ -110,7 +110,7 @@ export class HomeComponent implements OnInit {
   CounterCoins(userTotalValue:number){
     userTotalValue=this.value*this.coins;
     const values=userTotalValue-this.valueOfPayment;
-    console.log(values);
+    
     
   
   const value =this.machineState.find(value=>value.value==values);
@@ -216,27 +216,17 @@ else if(this.items.length==2){
  
 }
 EvenNumbers(values:number){
-  let largest=0;
-  for(let element of this.machineState){
-    if(element.value>=largest){
-      largest =element.value
-    
-    }
-   
-  }
-  for( let element of this.machineState){ 
-    const x=values/2
-    if(element.value==x){ 
+  const x=values/2
+ let item=this.machineState.find(user=>user.value==x);
+ 
+    if(item!==undefined){ 
        this.item={value:x,coins:2};
-       return;
+       
     }
-    else if(element.value!==x){
+    else if(item==undefined){
          this.item={value:2,coins:x}
-         return
+         
     }
-    
-  }
-
   
 }
 OddNumbers(value:number){

@@ -22,7 +22,7 @@ username:string;
 password:string;
 person:User[]=[];
 
-admin:Observable<User>;
+
   constructor(private router:Router,private store: Store<AppState>,
     private toastr: ToastrService ) {
    }
