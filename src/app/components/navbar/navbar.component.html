@@ -1,0 +1,21 @@
+<nav *ngIf="UserService.loggedUser?.username" class="navbar navbar-expand-lg navbar-light bg-light" style="width: 100%; font-size: 18px;">
+    <div class="collapse navbar-collapse" id="navbarText">
+      <ul class="navbar-nav mr-auto">
+        <li class="nav-item active">
+          <a class="nav-link" routerLink="/home" >Home <span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/profile" >Profile</a>
+        </li>
+        <li class="nav-item" *ngIf="UserService.loggedUser?.role=='ADMIN'" >
+          <a class="nav-link" routerLink="/admin" href="#">Admin</a>
+        </li> 
+        <li class="nav-item">
+          <a class="nav-link" style="cursor: pointer;" (click)="logout()" >Logout</a>
+        </li>
+      </ul>      
+      <span class="navbar-text">
+        Machine for change
+      </span>
+    </div>
+  </nav>

@@ -1,0 +1,22 @@
+
+    <div class="wrapper">
+  
+      <div class="basicInformation">
+          <h4>Payment</h4>
+          <label for="">Value:</label>
+          <input type="number" [(ngModel)]="value">
+          <br>
+          <label for="">Coins:</label>
+          <input type="number" [(ngModel)]="coins" >
+          
+          <button  (click)="Pay()">Payment</button>
+          <br>
+         
+      </div>
+      <p>Value avliable: <span *ngFor="let item of machineState">{{item.value}},</span></p>   
+      <p>Value of payment: <span>{{valueOfPayment}}</span></p> 
+    </div>
+ 
+
+       
+

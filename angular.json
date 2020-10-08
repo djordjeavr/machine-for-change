@@ -28,7 +28,9 @@
               "src/assets"
             ],
             "styles": [
-              "src/styles.scss"
+              "./node_modules/bootstrap/dist/css/bootstrap.css",
+              "src/styles.scss",
+              "node_modules/ngx-toastr/toastr.css"
             ],
             "scripts": []
           },
@@ -123,6 +125,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "machine-for-change"
+    }
+  },
+  "defaultProject": "machine-for-change",
+  "cli": {
+    "analytics": "c54e92c7-fd16-48cd-b4b7-1733b372e2b8"
+  }
 }

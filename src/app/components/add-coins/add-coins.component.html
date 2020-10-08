@@ -1,0 +1,14 @@
+<div class="login-form">
+    <h2>Add Coins</h2>
+    <h4>{{username}}</h4>
+<label for="">Value:</label>
+<input type="number" [(ngModel)]="item.value">
+<label for="">Coins:</label>
+<input type="number" [(ngModel)]="item.coins">
+
+<button (click)="addCoins()" >Add Coins</button>
+
+<p>Value avliable: <span *ngFor="let item of machineState">{{item.value}},</span></p>
+
+
+</div>

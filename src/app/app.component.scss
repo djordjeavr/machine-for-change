@@ -1,0 +1,33 @@
+$background-color:#1fe708;
+
+
+.wrapper{
+    width: 700px;
+    border: 2px solid white;
+    border-radius: 10px;
+    margin:100px 300px;
+    background-color: $background-color;
+    -webkit-box-shadow: 10px 10px 27px -8px rgba(0,0,0,0.75);
+-moz-box-shadow: 10px 10px 27px -8px rgba(0,0,0,0.75);
+box-shadow: 10px 10px 27px -8px rgba(0,0,0,0.75);
+}
+.main{
+    padding: 20px;
+}
+@media (min-width: 992px) and (max-width: 1199.98px) { 
+  .wrapper{
+      margin: 100px 100px;
+
+  }
+}
+@media (min-width: 768px) and (max-width: 991.98px) { 
+    .wrapper{
+        margin: 100px 30px;
+  
+    }
+ }
+ @media(max-width:730px){
+.wrapper{
+    margin: 100px 0px;
+}
+ }

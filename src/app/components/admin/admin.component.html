@@ -1,0 +1,23 @@
+<div class="wrapper">
+  
+    <div class="basicInformation">
+        <h4>Add Coins</h4>
+        <label for="">Value:</label>
+        <input type="number" [(ngModel)]="valueOfPayment">   
+        <br>
+        <p>Value of payment: <span>{{value}}</span></p>
+        <br>
+        <button (click)=" ChangeValueOfPayment()" >Change value</button>    
+    </div>
+   
+    <div class="coins">
+        <h4>Add new value</h4>
+        <label for="">Value:</label>
+        <input type="number" [(ngModel)]="values.value" >
+        <br>
+        <label for="">Coins:</label>
+        <input type="number" [(ngModel)]="values.coins">
+        <button (click)="AddValue()">Add coins</button>
+    </div>  
+    <p>Machine state: <span *ngFor="let item of machineState">(value:{{item.value}},coins:{{item.coins}}),</span></p>
+</div>

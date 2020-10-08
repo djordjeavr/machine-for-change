@@ -1,0 +1,16 @@
+<div class="wrapper">
+  
+        <div class="basicInformation">
+            <p>Role: <span>{{user.role}}</span></p>
+            <p>Username: <span> {{user.username}}</span></p>
+            
+           
+        </div>
+       
+        <div class="coins">
+            <p *ngFor="let item of userCoins">Value: {{item.value}} <span> Coin:{{item.coins}}</span></p>
+            <h5>Total value: {{totalValue}}</h5>
+            <button (click)="addCoins()">Add coins</button>
+        </div>
+      
+</div>
