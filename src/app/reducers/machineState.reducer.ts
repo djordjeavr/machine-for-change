@@ -6,7 +6,7 @@ const initialState:machineState[]=[
 {value:0.5,coins:30},{value:1,coins:100},
 {value:2,coins:100},{value:5,coins:35}]
 
-const valueOfPayment:number=6;
+let valueOfPayment:number;
 
 export function machineStateReducer(state:machineState[]=initialState,action:MachineStateAction.Actions){
     switch(action.type){

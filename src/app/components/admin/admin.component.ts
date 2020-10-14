@@ -37,14 +37,11 @@ value:number;
   AddValue(){
     
     const sameValue=this.machineState.find(value=> this.values.value==value.value);
-    console.log(sameValue);
     
     if(this.values.value!==undefined && this.values.coins!==undefined){ 
     if(sameValue==undefined){ 
-    console.log(this.values);
     this.store.dispatch(new MachineStateAction.AddCoins(this.values));
     this.store.select('machineState').subscribe(state=> this.machineState=state);     //function for add values and coins(update coins) and input check 
-    console.log(this.machineState);
     this.toastr.success('Coins and value were successfully added');
     this.values=new machineState();
   }

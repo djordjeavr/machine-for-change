@@ -2,15 +2,25 @@ $color-1:#d6d6d6;
 
 .wrapper{
     width: 100%;
-    height: 350px;
+    height: 850px;
    
 }
 
 .basicInformation{
-    width:250px;
-    padding: 10px;
-  margin: 20px 200px;
 
+    width:350px;
+    text-align: center;
+    padding: 10px;
+  margin: 20px 150px;
+  border: 1px solid $color-1;
+  border-radius: 20px;
+  p{
+    color: $color-1;
+
+    span{
+        color: $color-1;
+    }
+  }
    
 }
 input{
@@ -25,13 +35,14 @@ input{
    
 }
 button{
-    width: 200px;
+    width: 230px;
     outline: none;
     border: none;
     border-radius: 30px;
   margin-left: 20px;
     background: $color-1;
     font-size: 20px;
+    margin-bottom: 15px;
 }
 
 
@@ -44,13 +55,33 @@ label{
 h4{
     margin-bottom: 20px;
     text-align: center;
+    color: $color-1;
 }
 p{
     
     font-size: 20px;
     font-weight: 500;
     margin-bottom: 10px;
+    color: black;
     span{
         font-weight: 400;
+        color: black;
+        
     }
 }
+h3{
+    text-align: center;
+    margin-bottom: 20px;
+}
+h5{
+    color: black;
+}
+tr{
+    color: black;
+}
+@media(max-width:730px){
+    .basicInformation{
+        
+        margin: 20px 50px;
+    }
+     }

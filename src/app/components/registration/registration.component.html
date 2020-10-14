@@ -1,10 +1,12 @@
 <div class="login-form">
-    <h2>Sign Up</h2>
+    <h2>SET INITIAL STATE</h2>
 
-<input type="text" maxlength="10" [(ngModel)]="username" placeholder="Username" (keyup.enter)="addUser()">
-<input *ngIf="username=='admin'" type="password" [(ngModel)]="password" (keyup.enter)="addUser()"   placeholder="Password">
+<input type="text" maxlength="10" [(ngModel)]="username" placeholder="Username" >
 
-<button (click)=" addUser()" >Login</button>
+<input type="number" [(ngModel)]="valueOfPayment" placeholder="Value of payment" (keyup.enter)="setInitialState()" >   
+<input *ngIf="username=='admin'" type="password" [(ngModel)]="password" (keyup.enter)="setInitialState()"   placeholder="Password">
+
+<button (click)=" setInitialState()" >Adjust</button>
 
 
 </div>

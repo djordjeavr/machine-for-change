@@ -1,14 +1,4 @@
 <div class="wrapper">
-  
-    <div class="basicInformation">
-        <h4>Add Coins</h4>
-        <label for="">Value:</label>
-        <input type="number" [(ngModel)]="valueOfPayment" (keyup.enter)="ChangeValueOfPayment()">   
-        <br>
-        <p>Value of payment: <span>{{value}}</span></p>
-        <br>
-        <button (click)=" ChangeValueOfPayment()" >Change value</button>    
-    </div>
    
     <div class="coins">
         <h4>Add new value</h4>
@@ -18,6 +8,25 @@
         <label for="">Coins:</label>
         <input type="number" [(ngModel)]="values.coins" (keyup.enter)="AddValue()">
         <button (click)="AddValue()">Add coins</button>
-    </div>  
-    <p>Machine state: <span *ngFor="let item of machineState">(value:{{item.value}},coins:{{item.coins}}),</span></p>
+    </div> 
+    <h3>Machine State</h3> 
+    <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Values</th>
+            <th scope="col">Coins</th>
+           
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of machineState; let index=index">
+            <th scope="row">{{index+1}}</th>
+            <td>{{item.value}}</td>
+            <td>{{item.coins}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+      
 </div>

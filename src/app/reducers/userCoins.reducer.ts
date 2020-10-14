@@ -13,7 +13,9 @@ export function UserCoinsReducer(state:UserCoins[]=[], action:UserCoinsAction.Ac
           state=action.payload
           
           return state;
-           
+          case UserCoinsAction.REMOVE_USER_COINS:
+            state=action.payload;
+            return state;
             default:
          
                 return  state;

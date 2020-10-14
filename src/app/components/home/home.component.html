@@ -1,20 +1,35 @@
 
     <div class="wrapper">
-  
+      <p>Value of payment: <span>{{valueOfPayment}}</span></p> 
       <div class="basicInformation">
           <h4>Payment</h4>
-          <label for="">Value:</label>
-          <input type="number" [(ngModel)]="value">
-          <br>
-          <label for="">Coins:</label>
-          <input type="number" [(ngModel)]="coins" (keyup.enter)="Pay()">
-          
+          <p *ngFor="let item of userCoins">Value: {{item.value}} <span> Coins:{{item.coins}}</span></p>
+          <h5>Total value: {{totalValue}}</h5>
           <button  (click)="Pay()">Payment</button>
-          <br>
-         
+          <button (click)="backToAddCoins()">Back to Add Coins</button>
+        
+        
       </div>
-      <p>Value avliable: <span *ngFor="let item of machineState">{{item.value}},</span></p>   
-      <p>Value of payment: <span>{{valueOfPayment}}</span></p> 
+      <h3>Machine State</h3>
+      <table class="table">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Values</th>
+            <th scope="col">Coins</th>
+           
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of machineState; let index=index">
+            <th scope="row">{{index+1}}</th>
+            <td>{{item.value}}</td>
+            <td>{{item.coins}}</td>
+          </tr>
+
+        </tbody>
+      </table>
+      
     </div>
  
 

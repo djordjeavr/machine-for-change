@@ -1,14 +1,19 @@
-<div class="login-form">
+<p *ngIf="!isClicked">Value of payment: {{minimumValue}}</p>
+<div class="add-coins" *ngIf="!isClicked">
     <h2>Add Coins</h2>
-    <h4>{{username}}</h4>
+   
 <label for="">Value:</label>
 <input type="number" [(ngModel)]="item.value">
 <label for="">Coins:</label>
 <input type="number" [(ngModel)]="item.coins" (keyup.enter)="addCoins()">
 
 <button (click)="addCoins()" >Add Coins</button>
-
-<p>Value avliable: <span *ngFor="let item of machineState">{{item.value}},</span></p>
-
-
 </div>
+<div class="userCoins" *ngIf="userCoins.length" [ngClass]="{hidden:isClicked }" > 
+<p *ngFor="let item of userCoins">Value: {{item.value}} <span> Coin:{{item.coins}}</span></p>
+<h5>Total value: {{totalValue}}</h5>
+<button (click)=" ContinueToPayment()" >Continue to Payment</button>
+</div>
+
+<app-home *ngIf="isClicked" [userCoins]="userCoins" [totalValue]="totalValue" (stateChange)="stateChange(isClicked)" ></app-home>
+  

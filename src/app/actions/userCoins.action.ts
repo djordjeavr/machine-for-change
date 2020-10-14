@@ -4,7 +4,7 @@ import { UserCoins } from '../models/userCoins';
 
 export const ADD_COINS ='[UserCoins] Add';
 export const UPDATE_COINS ='[UserCoins] Update';
-
+export const REMOVE_USER_COINS='[USER] Remove'
 
 
 export class AddCoins implements Action {
@@ -18,6 +18,9 @@ export class UpdateCoins implements Action {
 
     constructor(public payload: UserCoins[] ) {}
 }
+export class RemoveUser implements Action{
+    readonly type=REMOVE_USER_COINS;
+    constructor(public payload: UserCoins[]) {}
+}
 
-
-export type Actions= AddCoins|UpdateCoins
+export type Actions= AddCoins|UpdateCoins|RemoveUser

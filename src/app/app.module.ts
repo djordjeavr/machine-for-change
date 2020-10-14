@@ -4,7 +4,6 @@ import { NgModule } from '@angular/core';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { RegistrationComponent } from './components/registration/registration.component';
-import { ProfileComponent } from './components/profile/profile.component';
 import { AdminComponent } from './components/admin/admin.component';
 import { HomeComponent } from './components/home/home.component';
 import { NavbarComponent } from './components/navbar/navbar.component';
@@ -18,11 +17,11 @@ import { UserCoinsReducer } from './reducers/userCoins.reducer';
 import { machineStateReducer, valueOfPaymentReducer } from './reducers/machineState.reducer';
 
 
+
 @NgModule({
   declarations: [
     AppComponent,
     RegistrationComponent,
-    ProfileComponent,
     AdminComponent,
     HomeComponent,
     NavbarComponent,

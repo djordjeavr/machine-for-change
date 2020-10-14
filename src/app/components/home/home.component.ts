@@ -1,43 +1,41 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import {machineState} from '../../models/machineState'
 import * as MachineStateAction from '../../actions/machineState.action'
 import { UserCoins } from 'src/app/models/userCoins';
 import *as UserCoinsAction from '../../actions/userCoins.action';
 import {Store} from '@ngrx/store'
-import { UserCoinsReducer } from 'src/app/reducers/userCoins.reducer';
+
 import { UserService } from 'src/app/service/UserService';
-import { ValueTransformer } from '@angular/compiler/src/util';
+
 import { ToastrService } from 'ngx-toastr';
 
+import { AppState } from 'src/app/app.state';
 
-  interface AppState {
-    machineState:machineState[];
-    valueOfPayment:number;
-    userCoins:UserCoins[];
-    }
 
+
+ 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  value:number;
-  coins:number;
   userCoins:UserCoins[]=[];
+  
   machineState:machineState[]=[];
   valueOfPayment:number;
   item:machineState=new machineState();
   items:machineState[]=[];
-  constructor( private store: Store<AppState>, private store1:Store<AppState>,
-    private UserService:UserService, private toastr:ToastrService) {
- 
-      
-   }
+  isClicked:boolean=false;
+  constructor( private store: Store<AppState>, 
+    private UserService:UserService, private toastr:ToastrService) { }
 
+@Input() totalValue:number;
+
+@Output() stateChange:EventEmitter<boolean>=new EventEmitter();
   ngOnInit(): void {
-    this.store1.select('machineState').subscribe(state=>this.machineState=state);
-    this.store.select('userCoins').subscribe(state=> this.userCoins=state); 
+    this.store.select('machineState').subscribe(state=>this.machineState=state);
+    this.store.select('userCoins').subscribe(state=>this.userCoins=state)
     this.store.select('valueOfPayment').subscribe(state=>this.valueOfPayment=state); 
   console.log(this.machineState);
   console.log(this.userCoins);
@@ -45,71 +43,61 @@ export class HomeComponent implements OnInit {
 
   
   }
-  //function for payment
-  Pay(){  
+  counterTotalValue(){
+    console.log(!this.userCoins);
     
-    const machineState=this.machineState.find(value=> this.value==value.value);
-    const user =this.userCoins.find(person=> this.value==person.value);
-   if( machineState!==undefined){ 
-    let userTotalValue=0;
-    if(this.value!==undefined && this.coins!==undefined){
-      userTotalValue=this.value*this.coins;
-      const values=userTotalValue-this.valueOfPayment;
-      if(values-Math.floor(values)!==0){
-        this.toastr.warning('Must be an integer');
+    this.totalValue=0;
+      let value=0;
+      let coins=0;
+      let x=0
+      if(!this.userCoins){
+        this.totalValue=0;
         return;
       }
-      if(user!==undefined){ 
-        if(user.coins>=this.coins){           
+      
+      for (let i = 0; i <this.userCoins.length; i++) {    
+           value=this.userCoins[i].value;
+           coins=this.userCoins[i].coins;
+           x+=value*coins
+    
         
-         if(userTotalValue==this.valueOfPayment){
-           this. UserCoinsReducing(user);
-          this.MachineIncreaseCoins( machineState);
-          this.store1.select('machineState').subscribe(state=>this.machineState=state);
-    this.store.select('userCoins').subscribe(state=> this.userCoins=state);  
+      }
+      this.totalValue+=x; 
+    
+    
+  }
+  //function for payment
+  Pay(){  
+      
+         if(this.totalValue==this.valueOfPayment){
+          this.MachineIncreaseCoins( );
+           this. UserCoinsReducing();
+           this.counterTotalValue();
            console.log(this.machineState);
            console.log(this.userCoins);
-           this.value=undefined;
-           this.coins=undefined;
-           this.toastr.success('Succesfuly payment');
+           this.toastr.success(`Succesfuly payment`);
          }
-         else if(userTotalValue>this.valueOfPayment){
-           this. UserCoinsReducing(user);
-           this. MachineIncreaseCoins( machineState);
-          this.CounterCoins(userTotalValue);
-         this.MachineCoinsReducing(this.item)
-         this.UserIncreaseCoins(this.item);
-         this.store1.select('machineState').subscribe(state=>this.machineState=state);
+         else if(this.totalValue>this.valueOfPayment){
+           const userCoins=this.userCoins;
+          this. MachineIncreaseCoins();
+          this. UserCoinsReducing();
+          this.CounterCoins();
+          this.MachineCoinsReducing(userCoins)
+          this.UserIncreaseCoins(userCoins);
+         this.store.select('machineState').subscribe(state=>this.machineState=state);
          this.store.select('userCoins').subscribe(state=> this.userCoins=state);  
                 console.log(this.machineState);
                 console.log(this.userCoins);
-                this.value=undefined;
-                this.coins=undefined;
-                this.toastr.success('Succesfuly payment');
-         }
-         else{
-          this.toastr.error('You dont have enough coins ');
-         }
+                this.toastr.success(`Succesfuly payment`);
+       
         }
-        }
-        else{
-          this.toastr.error('You dont have enough coins ')
-        }
-    }
-    else{
-      this.value=undefined;
-      this.coins=undefined;
-      this.toastr.error('All fields must be fild in!!!');
-    }
-  }
-  else{
-    this.toastr.error('The value not available ');
-  }
+        
+  
   }
   //coin return calculation function
-  CounterCoins(userTotalValue:number){
-    userTotalValue=this.value*this.coins;
-    const values=userTotalValue-this.valueOfPayment;
+  CounterCoins(){
+    
+    const values=this.totalValue-this.valueOfPayment;
     
     
   
@@ -117,7 +105,6 @@ export class HomeComponent implements OnInit {
   if(value!==undefined){
    
   this.item={value:value.value,coins:1}; 
-  console.log(this.item);
   return;
   }
  if(values%2==0){ 
@@ -133,70 +120,73 @@ export class HomeComponent implements OnInit {
  
 }
 //function for increasing the coins in machine
-  MachineIncreaseCoins(sameValue:machineState){
-      
-    const MachineCoins=this.machineState.filter(item=>item.value!==this.value)
-    const coins= sameValue.coins+this.coins
+  MachineIncreaseCoins(){
+    let items:machineState[]=[];
+      for(let item of this.userCoins){ 
+    const MachineCoins=this.machineState.filter(item1=>item.value!==item1.value)
+   const machineCoins =this.machineState.find(item2=>item.value==item2.value);
+   
+   
+   if(machineCoins!==undefined){ 
    this.machineState=MachineCoins;
-    const items=[...this.machineState,{value:this.value,coins:coins}];
-
+   const coins=machineCoins.coins+item.coins;
+    items=[...this.machineState,{value:item.value,coins:coins}];
+ 
+  
+  }
+  else if(machineCoins==undefined){
+    items=[...this.machineState,{value:item.value,coins:item.coins}];
+  } 
+    this.store.dispatch(new MachineStateAction.UpdateCoins(items));
     
-    this.store.dispatch(new MachineStateAction.UpdateCoins(items))
+  }
   }
   //reducing coins user
-  UserCoinsReducing(user:UserCoins){
-    const UserCoins=this.userCoins.filter(person=>person.value!==this.value)
-    const coins= user.coins-this.coins;
+  UserCoinsReducing(){
+    let items:UserCoins[]=[]
+    for(let item of this.userCoins){ 
+    const UserCoins=this.userCoins.filter(person=>person.value!==item.value)
+      
    this.userCoins=UserCoins;
-    const items=[...this.userCoins,{value:this.value,coins:coins,username:this.UserService.loggedUser.username}];
+    items=[...this.userCoins];
+    
+    
     this.store.dispatch(new UserCoinsAction.UpdateCoins(items))
+    }
   }
   // increasing user the coins 
-UserIncreaseCoins(item:machineState){
+UserIncreaseCoins(userCoins:UserCoins[]){
   let items:UserCoins[]=[]
+    
   if(this.items.length!==2){ 
-  const user =this.userCoins.find(person=> item.value==person.value);
-  const UserCoins=this.userCoins.filter(person=>person.value!==item.value);
-  this.userCoins=UserCoins;
-  if(user!==undefined){ 
-  const coins= user.coins+item.coins;
-   items=[...this.userCoins,{value:item.value,coins:coins,username:this.UserService.loggedUser.username}];
-  }
-  else{
-    items=[...this.userCoins,{value:item.value,coins:item.coins,username:this.UserService.loggedUser.username}]
-  }
+
+   items=[{value:this.item.value,coins:this.item.coins,username:this.UserService.loggedUser.username}];
+
 }
 else if(this.items.length==2){
   
-  const user =this.userCoins.find(person=> this.items[0].value==person.value);
-  const user1 =this.userCoins.find(person=> this.items[1].value==person.value);
-  const UserCoins=this.userCoins.filter(item=>item.value!==this.items[1].value && item.value!==this.items[0].value);
-  this.userCoins=UserCoins;
-  if(user1==undefined){ 
-  const coins=user.coins+this.items[0].coins;
-  const coins1=user1.coins+this.items[1].coins
-  items=[...this.userCoins,{value:this.items[0].value,coins:coins,username:this.UserService.loggedUser.username},
-  {value:this.items[1].value,coins:coins1,username:this.UserService.loggedUser.username}
-]
-}
-else{
-  items=[...this.userCoins,{value:this.items[0].value,coins:this.items[0].coins,username:this.UserService.loggedUser.username},
+
+  items=[{value:this.items[0].value,coins:this.items[0].coins,username:this.UserService.loggedUser.username},
   {value:this.items[1].value,coins:this.items[1].coins,username:this.UserService.loggedUser.username}]
-}
+
 }
   this.store.dispatch(new UserCoinsAction.UpdateCoins(items))
+  this.counterTotalValue();
+
 }
 //increasing coins in the machine
-MachineCoinsReducing(item1:machineState){
- 
+MachineCoinsReducing(userCoins:UserCoins[]){
+  
   let items:machineState[]=[];
+ 
   if(this.items.length!==2){
-  const  machineState=this.machineState.find(value=> item1.value==value.value);
-  const MachineCoins=this.machineState.filter(item=>item.value!==item1.value)
-  const coins=  machineState.coins-item1.coins;
+  
+  const  machineState=this.machineState.find(value=> this.item.value==value.value);
+  const MachineCoins=this.machineState.filter(item1=>this.item.value!==item1.value)
+  const coins=  machineState.coins-this.item.coins;
   
  this.machineState=MachineCoins;
-   items=[...this.machineState,{value:item1.value,coins:coins}];
+   items=[...this.machineState,{value:machineState.value,coins:coins}];
 
 }
 
@@ -213,7 +203,7 @@ else if(this.items.length==2){
   
 }
   this.store.dispatch(new MachineStateAction.UpdateCoins(items))
- 
+
 }
 EvenNumbers(values:number){
   const x=values/2
@@ -248,12 +238,13 @@ OddNumbers(value:number){
       return;
     }
     else if(value!==x && x<value){
+     
            const y=value-x;
           
            
            if(y%2==0){
              const c=y/2
-             if(c==this.machineState[i].value){
+             if(c!==this.machineState[i].value){
              this.items=[{value:largest,coins:i},{value:c,coins:2}];
                return;
              }
@@ -263,12 +254,18 @@ OddNumbers(value:number){
             }
            }
            else{
+            
+             
             this.items=[{value:largest,coins:i},{value:1,coins:y}];
               
            }
       
     }
   }
+}
+backToAddCoins(){
+  
+  this.stateChange.emit(this.isClicked)
 }
  
 }

@@ -20,6 +20,7 @@ export  function reducer(state:User[]=[initialState], action: UserActions.Action
         case UserActions.ADD_USER:
          
             return [...state,action.payload];
+           
             default:
                 return  state;
     }
