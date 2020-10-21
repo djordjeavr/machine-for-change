@@ -2,9 +2,7 @@ import {machineState} from '../models/machineState'
 import * as MachineStateAction from '../actions/machineState.action'
 
 const initialState:machineState[]=[ 
-{value:0.1,coins:20},{value:0.2,coins:20},
-{value:0.5,coins:30},{value:1,coins:100},
-{value:2,coins:100},{value:5,coins:35}]
+]
 
 let valueOfPayment:number;
 

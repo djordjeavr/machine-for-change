@@ -46,7 +46,7 @@ value:number;
     this.values=new machineState();
   }
   else{
-    this.toastr.warning('The value already exists');
+    this.toastr.success('Coins were successfully added');
     this.updateCoins(sameValue,this.machineState);
       console.log(this.items);
       this.store.dispatch(new MachineStateAction.UpdateCoins(this.items))
