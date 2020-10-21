@@ -164,14 +164,14 @@ UserIncreaseCoins(userCoins:UserCoins[]){
     
   if(this.items.length!==2){ 
 
-   items=[{value:this.item.value,coins:this.item.coins,username:this.UserService.loggedUser.username}];
+   items=[{value:this.item.value,coins:this.item.coins}];
 
 }
 else if(this.items.length==2){
   
 
-  items=[{value:this.items[0].value,coins:this.items[0].coins,username:this.UserService.loggedUser.username},
-  {value:this.items[1].value,coins:this.items[1].coins,username:this.UserService.loggedUser.username}]
+  items=[{value:this.items[0].value,coins:this.items[0].coins},
+  {value:this.items[1].value,coins:this.items[1].coins}]
 
 }
   this.store.dispatch(new UserCoinsAction.UpdateCoins(items))

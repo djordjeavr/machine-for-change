@@ -6,13 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { machineState } from 'src/app/models/machineState';
 import * as MachineStateAction from '../../actions/machineState.action'
 import { Router } from '@angular/router';
-interface AppState {
-  userCoins:UserCoins[];
-  }
-  interface AppState1 {
-    valueOfPayment:number,
-    machineState:machineState[];
-    }
+import { AppState } from 'src/app/app.state';
 @Component({
   selector: 'app-add-coins',
   templateUrl: './add-coins.component.html',
@@ -24,32 +18,35 @@ items:any[];
 username:string;
 item:UserCoins=new UserCoins();
 machineState:machineState[]=[];
-minimumValue:number;
+minimumValueOfPayment:number;
+valueOfPayment:number;
 totalValue:number=0;
 isClicked:boolean=false;
-  constructor(private store: Store<AppState>,private store1:Store<AppState1>,private toastr: ToastrService,
+  constructor(private store: Store<AppState>,private toastr: ToastrService,
     private router:Router) { }
 
   ngOnInit(): void {
-    this.store1.select('machineState').subscribe(state=>this.machineState=state);
-    this.username=JSON.parse(localStorage.getItem('user')).username;
+    this.store.select('machineState').subscribe(state=>this.machineState=state);
     this.store.select('userCoins').subscribe(state=> this.userCoins=state);
-    this.store1.select('valueOfPayment').subscribe(state=>this.minimumValue=state);
     this.counterTotalValue();
     this.isClicked=false;
   }
+  setPaymentOfValue(){
+    if(this.minimumValueOfPayment!==undefined){ 
+    this.store.dispatch(new MachineStateAction.ChangeValueOfPayment(this.minimumValueOfPayment));
+    this.store.select('valueOfPayment').subscribe(state=>this.valueOfPayment=state);
+    this.minimumValueOfPayment=undefined; 
+  }
+  }
   addCoins(){
     if(this.item.value!==undefined && this.item.coins!==undefined){
-     
-
     const  userCoins=this.userCoins.find(item=>item.value==this.item.value);
-    this.store1.select('machineState').subscribe(state=>this.machineState=state);
+    this.store.select('machineState').subscribe(state=>this.machineState=state);
     this.store.select('userCoins').subscribe(state=> this.userCoins=state);                                                          
-      this.updateCoins(this.userCoins,userCoins);       //function for add coins and input check
-      
-      this.store.dispatch(new UserCoinsAction.UpdateCoins(this.items))
-      this.counterTotalValue(); 
-  this.toastr.success('Coins were successfully added');
+    this.updateCoins(this.userCoins,userCoins);       //function for add coins and input check
+    this.store.dispatch(new UserCoinsAction.UpdateCoins(this.items))
+    this.counterTotalValue(); 
+    this.toastr.success('Coins were successfully added');
     this.item=new UserCoins();
 
   }
@@ -61,7 +58,7 @@ isClicked:boolean=false;
   updateCoins(userCoins:UserCoins[],item2:UserCoins){
     
    if(item2==undefined){
-     item2={coins:0,value:this.item.value,username:this.username};
+     item2={coins:0,value:this.item.value};
    }
      const UserCoins=userCoins.filter(item=>item.value!==this.item.value)     //function for update coins in state
    const coins= item2.coins+this.item.coins
@@ -88,15 +85,15 @@ isClicked:boolean=false;
   }
 
   ContinueToPayment(){
- const value =this.totalValue-this.minimumValue  
+ const value =this.totalValue-this.valueOfPayment; 
     
     if(value-Math.floor(value)!==0){
       this.toastr.warning('Must be an integer');
       return;
     }
-    if(this.minimumValue<=this.totalValue){ 
+    if(this.valueOfPayment<=this.totalValue){ 
       if(this.isClicked==false){
-        this.isClicked=true
+        this.isClicked=true;
       }
       else{
         this.isClicked=false;

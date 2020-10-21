@@ -15,6 +15,7 @@ import { ToastrModule } from 'ngx-toastr';
 import { AddCoinsComponent } from './components/add-coins/add-coins.component';
 import { UserCoinsReducer } from './reducers/userCoins.reducer';
 import { machineStateReducer, valueOfPaymentReducer } from './reducers/machineState.reducer';
+import { SetInitialStateComponent } from './components/set-initial-state/set-initial-state.component';
 
 
 
@@ -25,7 +26,8 @@ import { machineStateReducer, valueOfPaymentReducer } from './reducers/machineSt
     AdminComponent,
     HomeComponent,
     NavbarComponent,
-    AddCoinsComponent
+    AddCoinsComponent,
+    SetInitialStateComponent
   ],
   imports: [
     BrowserModule,

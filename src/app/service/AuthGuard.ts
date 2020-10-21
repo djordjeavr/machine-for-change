@@ -1,19 +1,17 @@
 import {Injectable} from '@angular/core';
 import { ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
-import { UserService } from './UserService';
 import { AppState } from 'src/app/app.state';
 import {Store} from '@ngrx/store'
+import { machineState } from '../models/machineState';
 @Injectable({providedIn:'root'})
 export class AuthGuard implements CanActivate{
 
-    constructor(private router:Router, private userService:UserService, private store: Store<AppState>){}
+    constructor(private router:Router, private store: Store<AppState>){}
     canActivate(): boolean  {
-       const loggedUser=this.userService.loggedUser;
-      let valueOfPayment:number;
-       this.store.select('valueOfPayment').subscribe(state=>valueOfPayment=state); 
-       
-       if(!loggedUser.username || valueOfPayment==undefined){
-           this.router.navigateByUrl('registration');
+      let machineState:machineState[]=[];
+       this.store.select('machineState').subscribe(state=>machineState=state); 
+       if(machineState.length==0){
+           this.router.navigateByUrl('set-initial-state');
            return false;
        }
        else{

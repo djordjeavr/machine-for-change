@@ -1,0 +1,37 @@
+<h2>SET INITIAL MACHINE STATE</h2>
+<div class="card text-center" style="width: 23rem;">
+    <div class="card-body">
+      <h5 class="card-title">ADD COINS IN MACHINE</h5>
+        <div class="row">
+          <div class="col">
+            <input type="number" class="form-control" placeholder="Value" [(ngModel)]="values.value">
+          </div>
+          <div class="col">
+            <input type="number" class="form-control" placeholder="Number coins" [(ngModel)]="values.coins">
+          </div>
+        </div>
+      <button type="button" class="btn btn-primary btn-lg" (click)="AddValue()">Add</button>
+    </div>
+  </div>
+  <div class="container-table" *ngIf="machineState.length!==0">
+  <h3>Machine State</h3> 
+  <table class="table">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Values</th>
+          <th scope="col">Coins</th>
+         
+        </tr>
+      </thead>
+      <tbody>
+        <tr  *ngFor="let item of machineState; let index=index">
+          <th scope="row">{{index+1}}</th>
+          <td>{{item.value}}</td>
+          <td>{{item.coins}}</td>
+        </tr>
+
+      </tbody>
+    </table>
+</div>
+    

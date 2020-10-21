@@ -1,14 +1,13 @@
 
-    <div class="wrapper">
-      <p>Value of payment: <span>{{valueOfPayment}}</span></p> 
+    <div class="wrapper"> 
       <div class="basicInformation">
           <h4>Payment</h4>
           <p *ngFor="let item of userCoins">Value: {{item.value}} <span> Coins:{{item.coins}}</span></p>
           <h5>Total value: {{totalValue}}</h5>
-          <button  (click)="Pay()">Payment</button>
-          <button (click)="backToAddCoins()">Back to Add Coins</button>
-        
-        
+          <button type="button" class="btn btn-primary btn-lg" (click)="Pay()">Payment</button>
+          <br>
+          <button type="button" class="btn btn-primary btn-lg" (click)="backToAddCoins()">Back to Add Coins</button>
+
       </div>
       <h3>Machine State</h3>
       <table class="table">
