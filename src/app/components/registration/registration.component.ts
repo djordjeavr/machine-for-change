@@ -28,8 +28,6 @@ valueOfPayment:number;
   ngOnInit(): void {   
    this.store.select('user').subscribe(state=> this.person=state); 
    localStorage.removeItem('user');
-   this.store.dispatch(new UserCoinsAction.RemoveUser([]));
-
   }
   
   setInitialState(){

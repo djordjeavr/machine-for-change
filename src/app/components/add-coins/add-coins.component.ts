@@ -40,6 +40,7 @@ isClicked:boolean=false;
   }
   addCoins(){
     if(this.item.value!==undefined && this.item.coins!==undefined){
+      if(this.valueOfPayment!==undefined){ 
     const  userCoins=this.userCoins.find(item=>item.value==this.item.value);
     this.store.select('machineState').subscribe(state=>this.machineState=state);
     this.store.select('userCoins').subscribe(state=> this.userCoins=state);                                                          
@@ -48,7 +49,10 @@ isClicked:boolean=false;
     this.counterTotalValue(); 
     this.toastr.success('Coins were successfully added');
     this.item=new UserCoins();
-
+  }
+  else{
+    this.toastr.error('Add value of payment');
+  }
   }
   else{
     this.toastr.error('All fields must be filled');
@@ -108,6 +112,11 @@ else{
     this.totalValue=0;
     this.counterTotalValue();
     this.isClicked=isClicked
+  }
+  deleteValueAndCoins(item:UserCoins){
+  const userCoins=this.userCoins.filter(item1=>item1!==item);
+  this.store.dispatch(new UserCoinsAction.RemoveUserCoins(userCoins));
+  this.counterTotalValue();
   }
 
 }

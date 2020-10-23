@@ -18,9 +18,9 @@ export class UpdateCoins implements Action {
 
     constructor(public payload: UserCoins[] ) {}
 }
-export class RemoveUser implements Action{
+export class RemoveUserCoins implements Action{    
     readonly type=REMOVE_USER_COINS;
     constructor(public payload: UserCoins[]) {}
 }
 
-export type Actions= AddCoins|UpdateCoins|RemoveUser
+export type Actions= AddCoins|UpdateCoins|RemoveUserCoins

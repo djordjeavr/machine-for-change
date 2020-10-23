@@ -69,7 +69,7 @@ export class HomeComponent implements OnInit {
   }
   //function for payment
   Pay(){  
-      
+        if(this.totalValue>=this.valueOfPayment){ 
          if(this.totalValue==this.valueOfPayment){
           this.MachineIncreaseCoins( );
            this. UserCoinsReducing();
@@ -98,7 +98,10 @@ export class HomeComponent implements OnInit {
                 this.toastr.warning('The machine does not have enough coins. Try again');
               }
         }
-        
+      } 
+      else{
+        this.toastr.error('You dont have enough coins');
+      } 
   
   }
   //coin return calculation function
@@ -211,18 +214,24 @@ EvenNumbers(values:number){
   const x=values/2
  let item=this.machineState.find(user=>user.value==x&&user.coins>=2);
  const two=this.machineState.find(item=>item.value==2);
- 
+ const one=this.machineState.find(item=>item.value==1);
     if(item!==undefined){ 
        this.item={value:x,coins:2};
        
     }
     else if(item==undefined){
-      if(two.coins<2 || two.coins<x){
+      if(two==undefined||two.coins<=0 || two.coins<x){
+        this.item={value:1,coins:values};
+        console.log(this.item);
+        if(one==undefined || one.coins<x || one.coins<=0){ 
         this.store.dispatch(new UserCoinsAction.UpdateCoins(this.initialUserState));
         this.store.dispatch( new MachineStateAction.UpdateCoins(this.initialMachineState));
         this.initialState=true;
       }
-         this.item={value:2,coins:x}
+      }
+      else{ 
+         this.item={value:2,coins:x};
+        }
          
     }
   
@@ -237,64 +246,60 @@ OddNumbers(value:number){
       if(value>item){
         largest=item
       }
-    
-    }
-   
+    } 
   }
-  for(let i=1;i<=this.machineState.length;i++){
+  const a=this.machineState.find(item=>item.value==largest); 
+  for(let i=a.coins;i>0;i--){
     const x=largest*i;
     
     if(value==x){
-      this.item={value:largest,coins:i}
+      console.log('dddd');
+      this.item={value:largest,coins:i};
       return;
     }
-    else if(value!==x && x<value){
-     
+    else if(value!==x&&x<value){
            const y=value-x;
-          
+           const item=this.machineState.find(item1=>item1.value==y); 
+           console.log(item);
            
-           if(y%2==0){
-             const c=y/2     
-             if(two==undefined&&one==undefined){
-              this.store.dispatch(new UserCoinsAction.UpdateCoins(this.initialUserState));
-              this.store.dispatch( new MachineStateAction.UpdateCoins(this.initialMachineState));
-              this.initialState=true;
-              return;
-            }
-          
-             if(c==this.machineState[i].value){ 
-             this.items=[{value:largest,coins:i},{value:c,coins:2}];
-               return;
-             }
-           else  if(c!==this.machineState[i].value){
-             if(two!==undefined){ 
-               if(two.coins<2 || two.coins<c){
+           if(item!==undefined){ 
+            this.items=[{value:largest,coins:i},{value:y,coins:1}];
+            return;
+           }  
+         if(y%2==0){
+           let c=y/2;
+           let item=this.machineState.find(user=>user.value==c&&user.coins>=2);
+           if(item!==undefined){ 
+           this.items=[{value:largest,coins:i},{value:c,coins:2}];
+           return;
+          }
+          else if(item==undefined){
+            if(two==undefined||two.coins<=0 || two.coins<c){
+              if(one==undefined || one.coins<=0 || one.coins<y){
                 this.store.dispatch(new UserCoinsAction.UpdateCoins(this.initialUserState));
                 this.store.dispatch( new MachineStateAction.UpdateCoins(this.initialMachineState));
                 this.initialState=true;
+              }
+              else{
+                this.items=[{value:largest,coins:i},{value:1,coins:y}];
                 return;
-               }
-            this.items=[{value:largest,coins:i},{value:2,coins:c}];
-              return;
+              }
             }
-            else if(one!==undefined){
-              if(two.coins<1){
-                this.store.dispatch(new UserCoinsAction.UpdateCoins(this.initialUserState));
-                this.store.dispatch( new MachineStateAction.UpdateCoins(this.initialMachineState));
-                this.initialState=true;
-                return;
-               }
-              this.items=[{value:largest,coins:i},{value:1,coins:y}];
+            else{
+              this.items=[{value:largest,coins:i},{value:2,coins:c}];
+              return;
             }
           }
-           }  
+         }
+         else if (y%2!==0){
+         value=y;
+          return;
+      }          
     }
   }
 }
 backToAddCoins(){
-  
   this.stateChange.emit(this.isClicked)
-}
- 
+} 
 }
 
