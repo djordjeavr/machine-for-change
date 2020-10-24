@@ -1,6 +1,4 @@
-export class machineState{
-    
-    coins:number;
-    value:number;
-
+export class machineState {
+  coins: number;
+  value: number;
 }

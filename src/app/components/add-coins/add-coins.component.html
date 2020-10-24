@@ -1,30 +1,80 @@
-<div class="input-group mb-3"  *ngIf="!isClicked">
-    <input type="number"  [(ngModel)]="minimumValueOfPayment" class="form-control" placeholder="Value of payment" aria-label="Value of payment" aria-describedby="button-addon2" (keyup.enter)="setPaymentOfValue()">
-    <div class="input-group-append">
-      <button class="btn btn-outline-secondary" type="button" id="button-addon2" (click)="setPaymentOfValue()">Button</button>
-    </div>
+<div class="input-group mb-3" *ngIf="!isClicked">
+  <input
+    type="number"
+    [(ngModel)]="minimumValueOfPayment"
+    class="form-control"
+    placeholder="Value of payment"
+    aria-label="Value of payment"
+    aria-describedby="button-addon2"
+    (keyup.enter)="setPaymentOfValue()"
+  />
+  <div class="input-group-append">
+    <button
+      class="btn btn-outline-secondary"
+      type="button"
+      id="button-addon2"
+      (click)="setPaymentOfValue()"
+    >
+      Button
+    </button>
   </div>
-  <p *ngIf="valueOfPayment!==undefined">Value of payment: <span>{{valueOfPayment}}</span></p>
-<div class="card text-center" style="width: 23rem;" *ngIf="!isClicked">
-    <div class="card-body">
-      <h5 class="card-title">ADD COINS</h5>
-        <div class="row">
-          <div class="col">
-            <input type="number" class="form-control" placeholder="Value" [(ngModel)]="item.value">
-          </div>
-          <div class="col">
-            <input type="number" class="form-control" placeholder="Number coins" [(ngModel)]="item.coins"  (keyup.enter)="addCoins()">
-          </div>
-        </div>
-      <button type="button" class="btn btn-primary btn-lg" (click)="addCoins()">Add Coins</button>
+</div>
+<p *ngIf="valueOfPayment !== undefined">
+  Value of payment: <span>{{ valueOfPayment }}</span>
+</p>
+<div class="card text-center" style="width: 23rem" *ngIf="!isClicked">
+  <div class="card-body">
+    <h5 class="card-title">ADD COINS</h5>
+    <div class="row">
+      <div class="col">
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Value"
+          [(ngModel)]="item.value"
+        />
+      </div>
+      <div class="col">
+        <input
+          type="number"
+          class="form-control"
+          placeholder="Number coins"
+          [(ngModel)]="item.coins"
+          (keyup.enter)="addCoins()"
+        />
+      </div>
     </div>
+    <button type="button" class="btn btn-primary btn-lg" (click)="addCoins()">
+      Add Coins
+    </button>
   </div>
-<div class="userCoins" *ngIf="userCoins.length" [ngClass]="{hidden:isClicked }" > 
-<p *ngFor="let item of userCoins">Value: {{item.value}} <span> Coin:{{item.coins}}</span> <i class="fa fa-times" aria-hidden="true" (click)=" deleteValueAndCoins(item)"></i></p>
-<h5>Total value: {{totalValue}}</h5>
-<button type="button" class="btn btn-primary btn-lg" (click)="ContinueToPayment()">Continue to Payment</button>
+</div>
+<div
+  class="userCoins"
+  *ngIf="userCoins.length"
+  [ngClass]="{ hidden: isClicked }"
+>
+  <p *ngFor="let item of userCoins">
+    Value: {{ item.value }} <span> Coin:{{ item.coins }}</span>
+    <i
+      class="fa fa-times"
+      aria-hidden="true"
+      (click)="deleteValueAndCoins(item)"
+    ></i>
+  </p>
+  <h5>Total value: {{ totalValue }}</h5>
+  <button
+    type="button"
+    class="btn btn-primary btn-lg"
+    (click)="ContinueToPayment()"
+  >
+    Continue to Payment
+  </button>
 </div>
 
-
-<app-home *ngIf="isClicked" [userCoins]="userCoins" [totalValue]="totalValue" (stateChange)="stateChange(isClicked)" ></app-home>
-  
+<app-home
+  *ngIf="isClicked"
+  [userCoins]="userCoins"
+  [totalValue]="totalValue"
+  (stateChange)="stateChange(isClicked)"
+></app-home>

@@ -1,4 +1,4 @@
 export class UserCoins {
-    value:number;
-    coins:number;
+  value: number;
+  coins: number;
 }

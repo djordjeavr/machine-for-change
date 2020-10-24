@@ -1,36 +1,37 @@
-
-    <div class="wrapper"> 
-      <div class="basicInformation">
-          <h4>Payment</h4>
-          <p *ngFor="let item of userCoins">Value: {{item.value}} <span> Coins:{{item.coins}}</span></p>
-          <h5>Total value: {{totalValue}}</h5>
-          <button type="button" class="btn btn-primary btn-lg" (click)="Pay()">Payment</button>
-          <br>
-          <button type="button" class="btn btn-primary btn-lg" (click)="backToAddCoins()">Back to Add Coins</button>
-
-      </div>
-      <h3>Machine State</h3>
-      <table class="table">
-        <thead>
-          <tr>
-            <th scope="col">#</th>
-            <th scope="col">Values</th>
-            <th scope="col">Coins</th>
-           
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of machineState; let index=index">
-            <th scope="row">{{index+1}}</th>
-            <td>{{item.value}}</td>
-            <td>{{item.coins}}</td>
-          </tr>
-
-        </tbody>
-      </table>
-      
-    </div>
- 
-
-       
-
+<div class="wrapper">
+  <div class="basicInformation">
+    <h4>Payment</h4>
+    <p *ngFor="let item of userCoins">
+      Value: {{ item.value }} <span> Coins:{{ item.coins }}</span>
+    </p>
+    <h5>Total value: {{ totalValue }}</h5>
+    <button type="button" class="btn btn-primary btn-lg" (click)="Pay()">
+      Payment
+    </button>
+    <br />
+    <button
+      type="button"
+      class="btn btn-primary btn-lg"
+      (click)="backToAddCoins()"
+    >
+      Back to Add Coins
+    </button>
+  </div>
+  <h3>Machine State</h3>
+  <table class="table">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Values</th>
+        <th scope="col">Coins</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let item of machineState; let index = index">
+        <th scope="row">{{ index + 1 }}</th>
+        <td>{{ item.value }}</td>
+        <td>{{ item.coins }}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>

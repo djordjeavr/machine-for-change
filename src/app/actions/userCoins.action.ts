@@ -1,26 +1,25 @@
-import { Injectable } from '@angular/core'
-import { Action } from '@ngrx/store'
+import { Injectable } from '@angular/core';
+import { Action } from '@ngrx/store';
 import { UserCoins } from '../models/userCoins';
 
-export const ADD_COINS ='[UserCoins] Add';
-export const UPDATE_COINS ='[UserCoins] Update';
-export const REMOVE_USER_COINS='[USER] Remove'
-
+export const ADD_COINS = '[UserCoins] Add';
+export const UPDATE_COINS = '[UserCoins] Update';
+export const REMOVE_USER_COINS = '[USER] Remove';
 
 export class AddCoins implements Action {
-    readonly type = ADD_COINS
+  readonly type = ADD_COINS;
 
-    constructor(public payload: UserCoins ) {}
+  constructor(public payload: UserCoins) {}
 }
 
 export class UpdateCoins implements Action {
-    readonly type = UPDATE_COINS
+  readonly type = UPDATE_COINS;
 
-    constructor(public payload: UserCoins[] ) {}
+  constructor(public payload: UserCoins[]) {}
 }
-export class RemoveUserCoins implements Action{    
-    readonly type=REMOVE_USER_COINS;
-    constructor(public payload: UserCoins[]) {}
+export class RemoveUserCoins implements Action {
+  readonly type = REMOVE_USER_COINS;
+  constructor(public payload: UserCoins[]) {}
 }
 
-export type Actions= AddCoins|UpdateCoins|RemoveUserCoins
+export type Actions = AddCoins | UpdateCoins | RemoveUserCoins;

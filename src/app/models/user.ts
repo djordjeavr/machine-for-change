@@ -1,6 +1,5 @@
-export class User{
-  
-    username:string;
-    password:string;
-    role:string;
+export class User {
+  username: string;
+  password: string;
+  role: string;
 }

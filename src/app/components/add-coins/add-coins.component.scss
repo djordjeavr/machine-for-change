@@ -1,68 +1,64 @@
-$color-1:#d6d6d6;
+$color-1: #d6d6d6;
 .card {
+  background: none;
+  margin: auto;
+  border-color: $color-1;
+
+  input {
     background: none;
-    margin: auto;
-    border-color: $color-1;
-
-    input{
-        background: none;
-        border: 2px solid $color-1 ;
-        color: white;
-    }
-    button{
-        margin-top: 20px;
-        outline: none;
-    }
-    h5{
-        color: white;
-    }
-}
-h5{
+    border: 2px solid $color-1;
     color: white;
-}
-h2{ 
-    color: white;
-    font-weight: 900;
-    text-align: center;
-    margin-bottom: 30px;
-    margin-top: 30px;
-    }
-h3{
+  }
+  button {
     margin-top: 20px;
-    text-align: center;
+    outline: none;
+  }
+  h5 {
     color: white;
-    }
-    tr{
+  }
+}
+h5 {
+  color: white;
+}
+h2 {
+  color: white;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 30px;
+  margin-top: 30px;
+}
+h3 {
+  margin-top: 20px;
+  text-align: center;
+  color: white;
+}
+tr {
+  color: white;
+}
+
+.userCoins {
+  margin: 20px auto;
+  width: 500px;
+  text-align: center;
+}
+.hidden {
+  display: none;
+}
+p {
+  font-size: 20px;
+  font-weight: 500;
+  margin-bottom: 10px;
+  color: white;
+  span {
+    font-weight: 400;
     color: white;
-    }
-
-
-
-.userCoins{
-    margin: 20px auto;
-    width: 500px;
-    text-align: center;
-
-  
+  }
 }
-.hidden{
-    display: none;
+.form-control {
+  background: none;
+  color: white;
 }
-p{
-    font-size: 20px;
-    font-weight: 500;
-    margin-bottom: 10px;
-    color: white;
-    span{
-        font-weight: 400;
-        color: white;
-    }
-}
-.form-control{ 
-      background:none;
-      color: white;
-}
-i{
-    color: red;
-    margin-left: 10px;
+i {
+  color: red;
+  margin-left: 10px;
 }
