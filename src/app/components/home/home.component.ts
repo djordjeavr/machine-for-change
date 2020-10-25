@@ -4,11 +4,7 @@ import * as MachineStateAction from '../../actions/machineState.action';
 import { UserCoins } from 'src/app/models/userCoins';
 import * as UserCoinsAction from '../../actions/userCoins.action';
 import { Store } from '@ngrx/store';
-
-import { UserService } from 'src/app/service/UserService';
-
 import { ToastrService } from 'ngx-toastr';
-
 import { AppState } from 'src/app/app.state';
 
 @Component({
@@ -18,7 +14,6 @@ import { AppState } from 'src/app/app.state';
 })
 export class HomeComponent implements OnInit {
   userCoins: UserCoins[] = [];
-
   machineState: machineState[] = [];
   valueOfPayment: number;
   item: machineState = new machineState();
@@ -27,11 +22,7 @@ export class HomeComponent implements OnInit {
   initialMachineState: machineState[] = [];
   initialUserState: UserCoins[] = [];
   initialState: boolean = false;
-  constructor(
-    private store: Store<AppState>,
-    private UserService: UserService,
-    private toastr: ToastrService
-  ) {}
+  constructor(private store: Store<AppState>, private toastr: ToastrService) {}
 
   @Input() totalValue: number;
 
@@ -113,12 +104,7 @@ export class HomeComponent implements OnInit {
       this.item = { value: value.value, coins: 1 };
       return;
     }
-    if (values % 2 == 0) {
-      this.EvenNumbers(values);
-    }
-    if (values % 2 !== 0) {
-      this.OddNumbers(values);
-    }
+    this.OddNumbers(values);
   }
   //function for increasing the coins in machine
   MachineIncreaseCoins() {
@@ -226,8 +212,6 @@ export class HomeComponent implements OnInit {
       this.item = { value: x, coins: 2 };
     } else if (item == undefined) {
       if (two == undefined || two.coins <= 0 || two.coins < x) {
-        this.item = { value: 1, coins: values };
-
         if (one == undefined || one.coins < x || one.coins <= 0) {
           this.store.dispatch(
             new UserCoinsAction.UpdateCoins(this.initialUserState)
@@ -272,6 +256,7 @@ export class HomeComponent implements OnInit {
           return;
         } else if (value !== x && x < value) {
           const y = value - x;
+
           const item = this.machineState.find((item1) => item1.value == y);
           console.log(item);
 
@@ -282,6 +267,8 @@ export class HomeComponent implements OnInit {
             ];
             return;
           }
+          console.log(y);
+
           if (y % 2 == 0) {
             let c = y / 2;
             let item = this.machineState.find(
@@ -295,6 +282,7 @@ export class HomeComponent implements OnInit {
               return;
             } else if (item == undefined) {
               if (two == undefined || two.coins <= 0 || two.coins < c) {
+                console.log(c);
                 if (one == undefined || one.coins <= 0 || one.coins < y) {
                   this.store.dispatch(
                     new UserCoinsAction.UpdateCoins(this.initialUserState)
@@ -322,6 +310,16 @@ export class HomeComponent implements OnInit {
             if (one !== undefined) {
               value = y;
               return;
+            }
+            if (value % 2 == 0) {
+              const coins = value / 2;
+              const checkCoins = this.machineState.find(
+                (item) => item.coins >= coins
+              );
+              if (checkCoins !== undefined) {
+                this.EvenNumbers(value);
+                return;
+              }
             }
           }
         }

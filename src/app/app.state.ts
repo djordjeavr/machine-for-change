@@ -5,6 +5,5 @@ import { UserCoins } from './models/userCoins';
 export interface AppState {
   valueOfPayment: number;
   machineState: machineState[];
-  user: User[];
   userCoins: UserCoins[];
 }

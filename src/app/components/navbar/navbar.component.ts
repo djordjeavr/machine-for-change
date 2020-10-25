@@ -4,7 +4,6 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.state';
 import { machineState } from 'src/app/models/machineState';
 import { UserCoins } from 'src/app/models/userCoins';
-import { UserService } from 'src/app/service/UserService';
 
 @Component({
   selector: 'app-navbar',
@@ -14,11 +13,7 @@ import { UserService } from 'src/app/service/UserService';
 export class NavbarComponent implements OnInit {
   user: UserCoins = new UserCoins();
   machineState: machineState[] = [];
-  constructor(
-    public UserService: UserService,
-    private router: Router,
-    private store: Store<AppState>
-  ) {}
+  constructor(private router: Router, private store: Store<AppState>) {}
 
   ngOnInit(): void {
     this.user = JSON.parse(localStorage.getItem('user'));
