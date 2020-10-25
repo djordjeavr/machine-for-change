@@ -87,9 +87,7 @@ export class HomeComponent implements OnInit {
           this.item = new machineState();
           this.items = [];
         } else {
-          this.toastr.warning(
-            'The machine does not have enough coins. Try again'
-          );
+          this.toastr.warning('The machine does not have enough coins.');
         }
       }
     } else {
@@ -256,9 +254,7 @@ export class HomeComponent implements OnInit {
           return;
         } else if (value !== x && x < value) {
           const y = value - x;
-
           const item = this.machineState.find((item1) => item1.value == y);
-          console.log(item);
 
           if (item !== undefined) {
             this.items = [
@@ -267,7 +263,6 @@ export class HomeComponent implements OnInit {
             ];
             return;
           }
-          console.log(y);
 
           if (y % 2 == 0) {
             let c = y / 2;
@@ -282,7 +277,6 @@ export class HomeComponent implements OnInit {
               return;
             } else if (item == undefined) {
               if (two == undefined || two.coins <= 0 || two.coins < c) {
-                console.log(c);
                 if (one == undefined || one.coins <= 0 || one.coins < y) {
                   this.store.dispatch(
                     new UserCoinsAction.UpdateCoins(this.initialUserState)
@@ -310,6 +304,14 @@ export class HomeComponent implements OnInit {
             if (one !== undefined) {
               value = y;
               return;
+            } else {
+              this.store.dispatch(
+                new UserCoinsAction.UpdateCoins(this.initialUserState)
+              );
+              this.store.dispatch(
+                new MachineStateAction.UpdateCoins(this.initialMachineState)
+              );
+              this.initialState = true;
             }
             if (value % 2 == 0) {
               const coins = value / 2;

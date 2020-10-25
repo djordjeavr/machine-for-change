@@ -26,9 +26,15 @@ $background-color: #1fe708;
     position: relative;
   }
 }
-@media (max-width: 730px) {
+@media (min-width: 500px) and (max-width: 730px) {
   .wrapper {
     width: 510px;
+    margin: 100px 0px;
+  }
+}
+@media (max-width: 495px) {
+  .wrapper {
+    width: 410px;
     margin: 100px 0px;
   }
 }

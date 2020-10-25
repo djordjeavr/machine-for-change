@@ -32,3 +32,9 @@ h3 {
 tr {
   color: white;
 }
+
+@media (max-width: 495px) {
+  h2 {
+    font-size: 20px;
+  }
+}

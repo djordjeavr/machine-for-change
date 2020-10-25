@@ -62,3 +62,9 @@ i {
   color: red;
   margin-left: 10px;
 }
+@media (max-width: 495px) {
+  .userCoins {
+    width: 350px;
+    margin: 20px 8px;
+  }
+}
