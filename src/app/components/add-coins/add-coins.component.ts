@@ -105,7 +105,10 @@ export class AddCoinsComponent implements OnInit {
 
   ContinueToPayment() {
     const value = this.totalValue - this.valueOfPayment;
-
+    if (this.valueOfPayment == undefined) {
+      this.toastr.error('Enter the value of the payment');
+      return;
+    }
     if (value - Math.floor(value) !== 0) {
       this.toastr.warning('Must be an integer');
       return;
