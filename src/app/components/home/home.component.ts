@@ -22,10 +22,14 @@ export class HomeComponent implements OnInit {
   initialMachineState: machineState[] = [];
   initialUserState: UserCoins[] = [];
   initialState: boolean = false;
+  coins: number;
+  coins1: number;
+  machineState1: machineState[] = [];
+  machineState2: machineState[] = [];
+  isError: boolean = false;
   constructor(private store: Store<AppState>, private toastr: ToastrService) {}
 
   @Input() totalValue: number;
-
   @Output() stateChange: EventEmitter<boolean> = new EventEmitter();
   ngOnInit(): void {
     this.store
@@ -40,6 +44,7 @@ export class HomeComponent implements OnInit {
     this.initialMachineState = this.machineState;
     this.initialUserState = this.userCoins;
     this.initialState = false;
+    this.machineState2 = this.machineState;
   }
   counterTotalValue() {
     this.totalValue = 0;
@@ -86,6 +91,7 @@ export class HomeComponent implements OnInit {
           this.toastr.success(`Succesfuly payment`);
           this.item = new machineState();
           this.items = [];
+          this.coins1 = undefined;
         } else {
           this.toastr.warning('The machine does not have enough coins.');
         }
@@ -117,8 +123,6 @@ export class HomeComponent implements OnInit {
 
       if (machineCoins !== undefined) {
         this.machineState = MachineCoins;
-        console.log(this.machineState);
-
         const coins = machineCoins.coins + item.coins;
         items = [...this.machineState, { value: item.value, coins: coins }];
       } else if (machineCoins == undefined) {
@@ -225,18 +229,36 @@ export class HomeComponent implements OnInit {
     }
   }
   OddNumbers(value: number) {
+    this.isError = false;
     const two = this.machineState.find((item) => item.value == 2);
     const one = this.machineState.find((item) => item.value == 1);
     let largest = 0;
-    for (let element of this.machineState) {
-      if (element.value >= largest) {
-        let item = element.value;
-        if (value > item) {
-          largest = item;
+    if (this.machineState2.length == 0) {
+      for (let element of this.machineState) {
+        if (element.value >= largest) {
+          let item = element.value;
+          if (value > item) {
+            largest = item;
+          }
+        }
+      }
+    }
+    if (this.machineState2.length !== 0) {
+      for (let element of this.machineState2) {
+        if (element.value >= largest) {
+          let item = element.value;
+          if (value > item) {
+            largest = item;
+          }
         }
       }
     }
     const a = this.machineState.find((item) => item.value == largest);
+    if (largest * largest == value && a.coins >= largest) {
+      this.item = { value: largest, coins: largest };
+      this.isError = true;
+      return;
+    }
     if (a == undefined) {
       this.store.dispatch(
         new UserCoinsAction.UpdateCoins(this.initialUserState)
@@ -247,10 +269,18 @@ export class HomeComponent implements OnInit {
       this.initialState = true;
     } else {
       for (let i = a.coins; i > 0; i--) {
-        const x = largest * i;
+        let x = 0;
 
+        if (this.coins1 == undefined) {
+          this.coins = i;
+          x = largest * this.coins;
+        } else {
+          this.coins = this.coins1;
+          x = largest * this.coins;
+        }
         if (value == x) {
-          this.item = { value: largest, coins: i };
+          this.item = { value: largest, coins: this.coins };
+          this.isError = true;
           return;
         } else if (value !== x && x < value) {
           const y = value - x;
@@ -258,60 +288,70 @@ export class HomeComponent implements OnInit {
 
           if (item !== undefined) {
             this.items = [
-              { value: largest, coins: i },
+              { value: largest, coins: this.coins },
               { value: y, coins: 1 },
             ];
+            this.isError = true;
             return;
           }
-
           if (y % 2 == 0) {
             let c = y / 2;
             let item = this.machineState.find(
               (user) => user.value == c && user.coins >= 2
             );
-            if (item !== undefined) {
+            if (item !== undefined && c !== largest) {
               this.items = [
-                { value: largest, coins: i },
+                { value: largest, coins: this.coins },
                 { value: c, coins: 2 },
               ];
+              this.isError = true;
               return;
             } else if (item == undefined) {
               if (two == undefined || two.coins <= 0 || two.coins < c) {
                 if (one == undefined || one.coins <= 0 || one.coins < y) {
-                  this.store.dispatch(
-                    new UserCoinsAction.UpdateCoins(this.initialUserState)
-                  );
-                  this.store.dispatch(
-                    new MachineStateAction.UpdateCoins(this.initialMachineState)
-                  );
-                  this.initialState = true;
+                  this.coins1 = i - 1;
+                  if (this.coins1 == 0) {
+                    this.machineState2 = this.machineState.filter(
+                      (item) => item.value !== largest
+                    );
+                    this.isError = true;
+                    this.OddNumbers(value);
+                    return;
+                  } else {
+                    this.store.dispatch(
+                      new UserCoinsAction.UpdateCoins(this.initialUserState)
+                    );
+                    this.store.dispatch(
+                      new MachineStateAction.UpdateCoins(
+                        this.initialMachineState
+                      )
+                    );
+                    this.initialState = true;
+                    return;
+                  }
                 } else {
                   this.items = [
-                    { value: largest, coins: i },
+                    { value: largest, coins: this.coins },
                     { value: 1, coins: y },
                   ];
+                  this.isError = true;
                   return;
                 }
               } else {
                 this.items = [
-                  { value: largest, coins: i },
+                  { value: largest, coins: this.coins },
                   { value: 2, coins: c },
                 ];
+                this.isError = true;
                 return;
               }
             }
-          } else if (y % 2 !== 0) {
+          }
+          if (y % 2 !== 0) {
+            this.coins1 = i - 1;
             if (one !== undefined) {
               value = y;
               return;
-            } else {
-              this.store.dispatch(
-                new UserCoinsAction.UpdateCoins(this.initialUserState)
-              );
-              this.store.dispatch(
-                new MachineStateAction.UpdateCoins(this.initialMachineState)
-              );
-              this.initialState = true;
             }
             if (value % 2 == 0) {
               const coins = value / 2;
@@ -325,6 +365,16 @@ export class HomeComponent implements OnInit {
             }
           }
         }
+      }
+      if (this.isError == false) {
+        this.store.dispatch(
+          new UserCoinsAction.UpdateCoins(this.initialUserState)
+        );
+        this.store.dispatch(
+          new MachineStateAction.UpdateCoins(this.initialMachineState)
+        );
+        this.initialState = true;
+        return;
       }
     }
   }
