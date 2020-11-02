@@ -204,7 +204,6 @@ export class HomeComponent implements OnInit {
       const coins1 = machineState.coins - this.items[0].coins;
       const coins2 = machineState1.coins - this.items[1].coins;
       this.machineState = MachineCoins;
-      console.log(this.item1);
       if (this.item1 == undefined) {
         items = [
           ...this.machineState,
@@ -387,7 +386,9 @@ export class HomeComponent implements OnInit {
               this.isError = true;
               return;
             }
-            if (!this.isError) {
+           
+            
+            if (one !== undefined) {
               this.item1 = { value: largest, coins: this.coins };
               this.OddNumbers(y);
               return;
