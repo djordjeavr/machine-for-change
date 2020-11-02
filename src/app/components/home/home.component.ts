@@ -17,6 +17,7 @@ export class HomeComponent implements OnInit {
   machineState: machineState[] = [];
   valueOfPayment: number;
   item: machineState = new machineState();
+  item1: machineState = undefined;
   items: machineState[] = [];
   isClicked: boolean = false;
   initialMachineState: machineState[] = [];
@@ -154,11 +155,19 @@ export class HomeComponent implements OnInit {
 
     if (this.items.length !== 2) {
       items = [{ value: this.item.value, coins: this.item.coins }];
-    } else if (this.items.length == 2) {
-      items = [
-        { value: this.items[0].value, coins: this.items[0].coins },
-        { value: this.items[1].value, coins: this.items[1].coins },
-      ];
+    } else if (this.items.length >= 2) {
+      if (this.item1 == undefined) {
+        items = [
+          { value: this.items[0].value, coins: this.items[0].coins },
+          { value: this.items[1].value, coins: this.items[1].coins },
+        ];
+      } else {
+        items = [
+          this.item1,
+          { value: this.items[0].value, coins: this.items[0].coins },
+          { value: this.items[1].value, coins: this.items[1].coins },
+        ];
+      }
     }
     this.store.dispatch(new UserCoinsAction.UpdateCoins(items));
     this.counterTotalValue();
@@ -180,7 +189,7 @@ export class HomeComponent implements OnInit {
         ...this.machineState,
         { value: machineState.value, coins: coins },
       ];
-    } else if (this.items.length == 2) {
+    } else if (this.items.length >= 2) {
       const machineState = this.machineState.find(
         (value) => this.items[0].value == value.value
       );
@@ -195,11 +204,32 @@ export class HomeComponent implements OnInit {
       const coins1 = machineState.coins - this.items[0].coins;
       const coins2 = machineState1.coins - this.items[1].coins;
       this.machineState = MachineCoins;
-      items = [
-        ...this.machineState,
-        { value: this.items[0].value, coins: coins1 },
-        { value: this.items[1].value, coins: coins2 },
-      ];
+      console.log(this.item1);
+      if (this.item1 == undefined) {
+        items = [
+          ...this.machineState,
+          { value: this.items[0].value, coins: coins1 },
+          { value: this.items[1].value, coins: coins2 },
+        ];
+      } else if (this.item1 !== undefined) {
+        const machineState = this.machineState.find(
+          (value) => this.item1.value == value.value
+        );
+        const MachineCoins1 = this.machineState.filter(
+          (item) =>
+            item.value !== this.item1.value &&
+            item.value !== this.items[1].value &&
+            item.value !== this.items[0].value
+        );
+        this.machineState = MachineCoins1;
+        const coins = machineState.coins - this.item1.coins;
+        items = [
+          ...this.machineState,
+          { value: this.item1.value, coins: coins },
+          { value: this.items[0].value, coins: coins1 },
+          { value: this.items[1].value, coins: coins2 },
+        ];
+      }
     }
     this.store.dispatch(new MachineStateAction.UpdateCoins(items));
   }
@@ -349,8 +379,17 @@ export class HomeComponent implements OnInit {
           }
           if (y % 2 !== 0) {
             this.coins1 = i - 1;
-            if (one !== undefined) {
-              value = y;
+            if (one !== undefined && one.coins >= y) {
+              this.items = [
+                { value: largest, coins: this.coins },
+                { value: 1, coins: y },
+              ];
+              this.isError = true;
+              return;
+            }
+            if (!this.isError) {
+              this.item1 = { value: largest, coins: this.coins };
+              this.OddNumbers(y);
               return;
             }
             if (value % 2 == 0) {
