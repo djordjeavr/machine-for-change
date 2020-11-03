@@ -27,7 +27,6 @@ export class HomeComponent implements OnInit {
   coins1: number;
   machineState1: machineState[] = [];
   machineState2: machineState[] = [];
-  isError: boolean = false;
   constructor(private store: Store<AppState>, private toastr: ToastrService) {}
 
   @Input() totalValue: number;
@@ -45,7 +44,9 @@ export class HomeComponent implements OnInit {
     this.initialMachineState = this.machineState;
     this.initialUserState = this.userCoins;
     this.initialState = false;
-    this.machineState2 = this.machineState;
+    this.machineState2 = [];
+    this.coins1 = 0;
+    this.machineState1 = this.machineState;
   }
   counterTotalValue() {
     this.totalValue = 0;
@@ -92,7 +93,11 @@ export class HomeComponent implements OnInit {
           this.toastr.success(`Succesfuly payment`);
           this.item = new machineState();
           this.items = [];
-          this.coins1 = undefined;
+          this.initialMachineState = this.machineState;
+          this.initialUserState = this.userCoins;
+          this.machineState2 = [];
+          this.coins1 = 0;
+          this.machineState1 = this.machineState;
         } else {
           this.toastr.warning('The machine does not have enough coins.');
         }
@@ -251,6 +256,7 @@ export class HomeComponent implements OnInit {
             new MachineStateAction.UpdateCoins(this.initialMachineState)
           );
           this.initialState = true;
+          return;
         }
       } else {
         this.item = { value: 2, coins: x };
@@ -258,9 +264,140 @@ export class HomeComponent implements OnInit {
     }
   }
   OddNumbers(value: number) {
-    this.isError = false;
+    let largest = this.largestNumber(value);
+    let a = this.machineState.find((item) => item.value == largest);
+    console.log(a.coins);
+
     const two = this.machineState.find((item) => item.value == 2);
     const one = this.machineState.find((item) => item.value == 1);
+    if (this.machineState1.length == 0) {
+      this.store.dispatch(
+        new UserCoinsAction.UpdateCoins(this.initialUserState)
+      );
+      this.store.dispatch(
+        new MachineStateAction.UpdateCoins(this.initialMachineState)
+      );
+      this.initialState = true;
+      return;
+    }
+    for (let i = a.coins; i > 0; i--) {
+      let x = 0;
+      a = this.machineState.find((item) => item.value == largest);
+      if (largest * largest == value && a.coins >= largest) {
+        this.item = { value: largest, coins: largest };
+        return;
+      }
+      if (this.coins1 == 0) {
+        this.coins = i;
+        x = largest * this.coins;
+      } else {
+        this.coins = this.coins1;
+        x = largest * this.coins;
+      }
+
+      if (value == x) {
+        this.item = { value: largest, coins: this.coins };
+        return;
+      } else if (value !== x && x < value) {
+        const y = value - x;
+        const item = this.machineState.find(
+          (item1) => item1.value == y && item1.coins > 1
+        );
+        if (item !== undefined) {
+          this.items = [
+            { value: largest, coins: this.coins },
+            { value: y, coins: 1 },
+          ];
+          return;
+        }
+        if (y % 2 == 0) {
+          let c = y / 2;
+          let item = this.machineState.find(
+            (user) => user.value == c && user.coins >= 2
+          );
+          if (item !== undefined && c !== largest) {
+            this.items = [
+              { value: largest, coins: this.coins },
+              { value: c, coins: 2 },
+            ];
+            return;
+          } else if (item == undefined) {
+            if (two == undefined || two.coins <= 0 || two.coins < c) {
+              if (one == undefined || one.coins <= 0 || one.coins < y) {
+                if (this.coins1 == 0) {
+                  this.coins1 = i - 1;
+                } else {
+                  this.coins1 -= 1;
+                }
+                if (this.coins1 == 0) {
+                  this.machineState2 = this.machineState1.filter(
+                    (item) => item.value !== largest
+                  );
+                  this.machineState1 = this.machineState2;
+                  this.coins1 = 0;
+                  this.OddNumbers(value);
+                }
+              } else {
+                this.items = [
+                  { value: largest, coins: this.coins },
+                  { value: 1, coins: y },
+                ];
+                return;
+              }
+            } else {
+              this.items = [
+                { value: largest, coins: this.coins },
+                { value: 2, coins: c },
+              ];
+              return;
+            }
+          }
+        }
+        if (y % 2 !== 0) {
+          if (one !== undefined && one.coins >= y) {
+            this.items = [
+              { value: largest, coins: this.coins },
+              { value: 1, coins: y },
+            ];
+            return;
+          }
+          if (one !== undefined) {
+            this.item1 = { value: largest, coins: this.coins };
+            this.OddNumbers(y);
+            return;
+          }
+          if (value % 2 == 0) {
+            const coins = value / 2;
+            const checkCoins = this.machineState.find(
+              (item) => item.coins >= coins
+            );
+            if (checkCoins !== undefined) {
+              this.EvenNumbers(value);
+              return;
+            }
+          }
+          if (this.coins1 == 0) {
+            this.coins1 = i - 1;
+          } else {
+            this.coins1 = this.coins1 - 1;
+          }
+          if (this.coins1 == 0) {
+            this.machineState2 = this.machineState1.filter(
+              (item) => item.value !== largest
+            );
+            this.machineState1 = this.machineState2;
+            this.coins1 = 0;
+            this.OddNumbers(value);
+          }
+        }
+      }
+    }
+  }
+
+  backToAddCoins() {
+    this.stateChange.emit(this.isClicked);
+  }
+  largestNumber(value) {
     let largest = 0;
     if (this.machineState2.length == 0) {
       for (let element of this.machineState) {
@@ -282,154 +419,6 @@ export class HomeComponent implements OnInit {
         }
       }
     }
-    const a = this.machineState.find((item) => item.value == largest);
-    if (largest * largest == value && a.coins >= largest) {
-      this.item = { value: largest, coins: largest };
-      this.isError = true;
-      return;
-    }
-    if (a == undefined) {
-      this.store.dispatch(
-        new UserCoinsAction.UpdateCoins(this.initialUserState)
-      );
-      this.store.dispatch(
-        new MachineStateAction.UpdateCoins(this.initialMachineState)
-      );
-      this.initialState = true;
-    } else {
-      for (let i = a.coins; i > 0; i--) {
-        let x = 0;
-
-        if (this.coins1 == undefined) {
-          this.coins = i;
-          x = largest * this.coins;
-        } else {
-          this.coins = this.coins1;
-          x = largest * this.coins;
-        }
-
-        if (value == x) {
-          this.item = { value: largest, coins: this.coins };
-          this.isError = true;
-          return;
-        } else if (value !== x && x < value) {
-          const y = value - x;
-          const item = this.machineState.find(
-            (item1) => item1.value == y && item1.coins > 1
-          );
-          if (item !== undefined) {
-            this.items = [
-              { value: largest, coins: this.coins },
-              { value: y, coins: 1 },
-            ];
-            this.isError = true;
-            return;
-          }
-          if (y % 2 == 0) {
-            let c = y / 2;
-            let item = this.machineState.find(
-              (user) => user.value == c && user.coins >= 2
-            );
-            if (item !== undefined && c !== largest) {
-              this.items = [
-                { value: largest, coins: this.coins },
-                { value: c, coins: 2 },
-              ];
-              this.isError = true;
-              return;
-            } else if (item == undefined) {
-              if (two == undefined || two.coins <= 0 || two.coins < c) {
-                if (one == undefined || one.coins <= 0 || one.coins < y) {
-                  this.coins1 = i - 1;
-                  if (this.coins1 == 0) {
-                    this.machineState2 = this.machineState.filter(
-                      (item) => item.value !== largest
-                    );
-                    this.isError = true;
-                    this.coins1 = undefined;
-                    this.OddNumbers(value);
-                    return;
-                  } else {
-                    this.store.dispatch(
-                      new UserCoinsAction.UpdateCoins(this.initialUserState)
-                    );
-                    this.store.dispatch(
-                      new MachineStateAction.UpdateCoins(
-                        this.initialMachineState
-                      )
-                    );
-                    this.initialState = true;
-                    return;
-                  }
-                } else {
-                  this.items = [
-                    { value: largest, coins: this.coins },
-                    { value: 1, coins: y },
-                  ];
-                  this.isError = true;
-                  return;
-                }
-              } else {
-                this.items = [
-                  { value: largest, coins: this.coins },
-                  { value: 2, coins: c },
-                ];
-                this.isError = true;
-                return;
-              }
-            }
-          }
-          if (y % 2 !== 0) {
-            if (one !== undefined && one.coins >= y) {
-              this.items = [
-                { value: largest, coins: this.coins },
-                { value: 1, coins: y },
-              ];
-              this.isError = true;
-              return;
-            }
-
-            if (one !== undefined) {
-              this.item1 = { value: largest, coins: this.coins };
-              this.OddNumbers(y);
-              return;
-            }
-            this.coins1 = i - 1;
-            if (this.coins1 == 0) {
-              this.machineState2 = this.machineState.filter(
-                (item) => item.value !== largest
-              );
-              this.isError = true;
-              this.coins1 = undefined;
-              this.OddNumbers(value);
-              return;
-            }
-            if (value % 2 == 0) {
-              const coins = value / 2;
-              const checkCoins = this.machineState.find(
-                (item) => item.coins >= coins
-              );
-              if (checkCoins !== undefined) {
-                this.EvenNumbers(value);
-                return;
-              }
-            }
-          }
-        }
-      }
-      if (this.isError == false) {
-        this.store.dispatch(
-          new UserCoinsAction.UpdateCoins(this.initialUserState)
-        );
-        this.store.dispatch(
-          new MachineStateAction.UpdateCoins(this.initialMachineState)
-        );
-        this.initialState = true;
-        return;
-      }
-    }
-  }
-  backToAddCoins() {
-    this.stateChange.emit(this.isClicked);
+    return largest;
   }
 }
