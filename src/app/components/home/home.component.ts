@@ -307,7 +307,7 @@ export class HomeComponent implements OnInit {
           this.coins = this.coins1;
           x = largest * this.coins;
         }
-        
+
         if (value == x) {
           this.item = { value: largest, coins: this.coins };
           this.isError = true;
@@ -346,7 +346,7 @@ export class HomeComponent implements OnInit {
                       (item) => item.value !== largest
                     );
                     this.isError = true;
-                    this.coins1=undefined;
+                    this.coins1 = undefined;
                     this.OddNumbers(value);
                     return;
                   } else {
@@ -369,7 +369,7 @@ export class HomeComponent implements OnInit {
                   this.isError = true;
                   return;
                 }
-              } else  {
+              } else {
                 this.items = [
                   { value: largest, coins: this.coins },
                   { value: 2, coins: c },
@@ -380,7 +380,6 @@ export class HomeComponent implements OnInit {
             }
           }
           if (y % 2 !== 0) {
-
             if (one !== undefined && one.coins >= y) {
               this.items = [
                 { value: largest, coins: this.coins },
@@ -395,18 +394,16 @@ export class HomeComponent implements OnInit {
               this.OddNumbers(y);
               return;
             }
-             this.coins1 = i - 1;
-             console.log(this.coins1);
-             
-                  if (this.coins1 == 0) {
-                    this.machineState2 = this.machineState.filter(
-                      (item) => item.value !== largest
-                    );
-                    this.isError = true;
-                    this.coins1=undefined;
-                    this.OddNumbers(value);
-                    return;
-                  }
+            this.coins1 = i - 1;
+            if (this.coins1 == 0) {
+              this.machineState2 = this.machineState.filter(
+                (item) => item.value !== largest
+              );
+              this.isError = true;
+              this.coins1 = undefined;
+              this.OddNumbers(value);
+              return;
+            }
             if (value % 2 == 0) {
               const coins = value / 2;
               const checkCoins = this.machineState.find(
