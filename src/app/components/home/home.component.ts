@@ -17,7 +17,6 @@ export class HomeComponent implements OnInit {
   machineState: machineState[] = [];
   valueOfPayment: number;
   item: machineState = undefined;
-  item1: machineState = undefined;
   items: machineState[] = [];
   isClicked: boolean = false;
   initialMachineState: machineState[] = [];
@@ -27,7 +26,7 @@ export class HomeComponent implements OnInit {
   coins1: number;
   machineState1: machineState[] = [];
   machineState2: machineState[] = [];
-  boolean: boolean = false;
+  values: number = 0;
   constructor(private store: Store<AppState>, private toastr: ToastrService) {}
 
   @Input() totalValue: number;
@@ -98,7 +97,6 @@ export class HomeComponent implements OnInit {
           this.initialUserState = this.userCoins;
           this.machineState2 = [];
           this.coins1 = 0;
-          this.item1 = undefined;
           this.machineState1 = this.machineState;
         } else {
           this.toastr.warning('The machine does not have enough coins.');
@@ -110,13 +108,13 @@ export class HomeComponent implements OnInit {
   }
   //coin return calculation function
   CounterCoins() {
-    const values = this.totalValue - this.valueOfPayment;
-    const value = this.machineState.find((value) => value.value == values);
+    this.values = this.totalValue - this.valueOfPayment;
+    const value = this.machineState.find((value) => value.value == this.values);
     if (value !== undefined) {
       this.item = { value: value.value, coins: 1 };
       return;
     }
-    this.OddNumbers(values);
+    this.EvenAndOddNumbers(this.values);
   }
   //function for increasing the coins in machine
   MachineIncreaseCoins() {
@@ -164,18 +162,10 @@ export class HomeComponent implements OnInit {
     if (this.items.length !== 2) {
       items = [{ value: this.item.value, coins: this.item.coins }];
     } else if (this.items.length >= 2) {
-      if (this.item1 == undefined) {
-        items = [
-          { value: this.items[0].value, coins: this.items[0].coins },
-          { value: this.items[1].value, coins: this.items[1].coins },
-        ];
-      } else {
-        items = [
-          this.item1,
-          { value: this.items[0].value, coins: this.items[0].coins },
-          { value: this.items[1].value, coins: this.items[1].coins },
-        ];
-      }
+      items = [
+        { value: this.items[0].value, coins: this.items[0].coins },
+        { value: this.items[1].value, coins: this.items[1].coins },
+      ];
     }
     this.store.dispatch(new UserCoinsAction.UpdateCoins(items));
     this.counterTotalValue();
@@ -212,64 +202,15 @@ export class HomeComponent implements OnInit {
       const coins1 = machineState.coins - this.items[0].coins;
       const coins2 = machineState1.coins - this.items[1].coins;
       this.machineState = MachineCoins;
-      if (this.item1 == undefined) {
-        items = [
-          ...this.machineState,
-          { value: this.items[0].value, coins: coins1 },
-          { value: this.items[1].value, coins: coins2 },
-        ];
-      } else if (this.item1 !== undefined) {
-        const machineState = this.machineState.find(
-          (value) => this.item1.value == value.value
-        );
-        const MachineCoins1 = this.machineState.filter(
-          (item) =>
-            item.value !== this.item1.value &&
-            item.value !== this.items[1].value &&
-            item.value !== this.items[0].value
-        );
-        this.machineState = MachineCoins1;
-        const coins = machineState.coins - this.item1.coins;
-        items = [
-          ...this.machineState,
-          { value: this.item1.value, coins: coins },
-          { value: this.items[0].value, coins: coins1 },
-          { value: this.items[1].value, coins: coins2 },
-        ];
-      }
+      items = [
+        ...this.machineState,
+        { value: this.items[0].value, coins: coins1 },
+        { value: this.items[1].value, coins: coins2 },
+      ];
     }
     this.store.dispatch(new MachineStateAction.UpdateCoins(items));
   }
-  EvenNumbers(values: number) {
-    const x = values / 2;
-    let item = this.machineState.find(
-      (user) => user.value == x && user.coins >= 2
-    );
-    const two = this.machineState.find((item) => item.value == 2);
-    const one = this.machineState.find((item) => item.value == 1);
-    if (item !== undefined) {
-      this.item = { value: x, coins: 2 };
-    } else if (item == undefined) {
-      if (two == undefined || two.coins <= 0 || two.coins < x) {
-        if (one == undefined || one.coins < x || one.coins <= 0) {
-          this.store.dispatch(
-            new UserCoinsAction.UpdateCoins(this.initialUserState)
-          );
-          this.store.dispatch(
-            new MachineStateAction.UpdateCoins(this.initialMachineState)
-          );
-          this.initialState = true;
-          return;
-        }
-      } else {
-        this.item = { value: 2, coins: x };
-      }
-    }
-  }
-  OddNumbers(value: number) {
-    if (this.item1 !== undefined) {
-      this.boolean = false;
-    }
+  EvenAndOddNumbers(value: number) {
     let largest = this.largestNumber(value);
     let a = this.machineState1.find((item) => item.value == largest); //make sure there is the largest number in the machine state
     const two = this.machineState.find((item) => item.value == 2);
@@ -291,15 +232,15 @@ export class HomeComponent implements OnInit {
       );
       this.machineState1 = this.machineState2;
       this.coins1 = 0;
-      this.OddNumbers(value);
+      this.EvenAndOddNumbers(value);
+    }
+    if (largest * largest == value && a.coins >= largest) {
+      this.item = { value: largest, coins: largest };
+      return;
     }
     for (let i = a.coins; i > 0; i--) {
       let x = 0;
-      a = this.machineState.find((item) => item.value == largest);
-      if (largest * largest == value && a.coins >= largest) {
-        this.item = { value: largest, coins: largest };
-        return;
-      }
+
       if (this.coins1 == 0) {
         this.coins = i;
         x = largest * this.coins;
@@ -307,9 +248,9 @@ export class HomeComponent implements OnInit {
         this.coins = this.coins1;
         x = largest * this.coins;
       }
-
       if (value == x && this.coins <= a.coins) {
         this.item = { value: largest, coins: this.coins };
+
         return;
       } else if (value !== x && x < value) {
         const y = value - x; //residue
@@ -338,23 +279,23 @@ export class HomeComponent implements OnInit {
           } else if (item == undefined) {
             if (two == undefined || two.coins <= 0 || two.coins < c) {
               if (one == undefined || one.coins <= 0 || one.coins < y) {
-                if (this.boolean == true) {
-                  if (this.coins1 == 0) {
-                    this.coins1 = i - 1;
-                  } else {
-                    this.coins1 = this.coins1 - 1;
-                  }
-                  if (this.coins1 == 0) {
-                    this.machineState2 = this.machineState1.filter(
-                      (item) => item.value !== largest
-                    ); //eject values ​​that don't have coins
-                    this.machineState1 = this.machineState2;
-                    this.coins1 = 0;
-                    this.OddNumbers(value);
-                  } else {
-                    let machineCoins = this.machineState1.find(
-                      (item) => item.value == largest
-                    );
+                if (this.coins1 == 0) {
+                  this.coins1 = i - 1;
+                } else {
+                  this.coins1 = this.coins1 - 1;
+                }
+                if (this.coins1 == 0) {
+                  this.machineState2 = this.machineState1.filter(
+                    (item) => item.value !== largest
+                  ); //eject values ​​that don't have coins
+                  this.machineState1 = this.machineState2;
+                  this.coins1 = 0;
+                  this.EvenAndOddNumbers(value);
+                } else {
+                  let machineCoins = this.machineState1.find(
+                    (item) => item.value == largest
+                  );
+                  if (machineCoins !== undefined) {
                     machineCoins = {
                       value: machineCoins.value,
                       coins: this.coins1,
@@ -363,7 +304,7 @@ export class HomeComponent implements OnInit {
                       (item) => item.value !== largest
                     );
                     this.machineState1 = [...this.machineState2, machineCoins]; //confiscation of one coin
-                    this.OddNumbers(value);
+                    this.EvenAndOddNumbers(value);
                   }
                 }
               } else {
@@ -404,29 +345,23 @@ export class HomeComponent implements OnInit {
             ];
             return;
           }
-
-          if (this.boolean == false && one !== undefined) {
-            this.item1 = { value: largest, coins: this.coins };
-            this.OddNumbers(y);
-            return;
+          if (this.coins1 == 0) {
+            this.coins1 = i - 1;
+          } else {
+            this.coins1 = this.coins1 - 1;
           }
-          if (this.boolean == true) {
-            if (this.coins1 == 0) {
-              this.coins1 = i - 1;
-            } else {
-              this.coins1 = this.coins1 - 1;
-            }
-            if (this.coins1 == 0) {
-              this.machineState2 = this.machineState1.filter(
-                (item) => item.value !== largest
-              ); //eject values ​​that don't have coins
-              this.machineState1 = this.machineState2;
-              this.coins1 = 0;
-              this.OddNumbers(value);
-            } else {
-              let machineCoins = this.machineState1.find(
-                (item) => item.value == largest
-              );
+          if (this.coins1 == 0) {
+            this.machineState2 = this.machineState1.filter(
+              (item) => item.value !== largest
+            ); //eject values ​​that don't have coins
+            this.machineState1 = this.machineState2;
+            this.coins1 = 0;
+            this.EvenAndOddNumbers(value);
+          } else {
+            let machineCoins = this.machineState1.find(
+              (item) => item.value == largest
+            );
+            if (machineCoins !== undefined) {
               machineCoins = {
                 value: machineCoins.value,
                 coins: this.coins1,
@@ -435,24 +370,11 @@ export class HomeComponent implements OnInit {
                 (item) => item.value !== largest
               );
               this.machineState1 = [...this.machineState2, machineCoins]; //confiscation of one coin
-              this.OddNumbers(value);
+              this.EvenAndOddNumbers(value);
             }
           }
         }
       }
-    }
-    if (this.boolean == false) {
-      this.item1 = undefined;
-      this.boolean = true;
-      this.OddNumbers(value);
-    }
-    if (this.boolean == true) {
-      this.machineState2 = this.machineState1.filter(
-        (item) => item.value !== largest
-      ); //eject values ​​that don't have coins
-      this.machineState1 = this.machineState2;
-      this.coins1 = 0;
-      this.OddNumbers(value);
     }
   }
 

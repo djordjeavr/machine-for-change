@@ -5,7 +5,6 @@ import * as UserCoinsAction from '../../actions/userCoins.action';
 import { ToastrService } from 'ngx-toastr';
 import { machineState } from 'src/app/models/machineState';
 import * as MachineStateAction from '../../actions/machineState.action';
-import { Router } from '@angular/router';
 import { AppState } from 'src/app/app.state';
 @Component({
   selector: 'app-add-coins',
@@ -22,11 +21,7 @@ export class AddCoinsComponent implements OnInit {
   valueOfPayment: number;
   totalValue: number = 0;
   isClicked: boolean = false;
-  constructor(
-    private store: Store<AppState>,
-    private toastr: ToastrService,
-    private router: Router
-  ) {}
+  constructor(private store: Store<AppState>, private toastr: ToastrService) {}
 
   ngOnInit(): void {
     this.store
@@ -90,7 +85,6 @@ export class AddCoinsComponent implements OnInit {
     this.items = [...userCoins, item1];
   }
   counterTotalValue() {
-    console.log(this.userCoins);
     this.totalValue = 0;
     let value = 0;
     let coins = 0;
