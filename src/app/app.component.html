@@ -1,6 +1,15 @@
-<div class="wrapper">
+<div class="info" *ngIf="!isHidden">
+  <h1>Machine of Change</h1>
+  <h2>
+    Welcome to the page, if you want to use our machine click here
+    <i class="fa fa-arrow-down" aria-hidden="true"></i>
+  </h2>
+  <button type="button" class="btn btn-danger" (click)="isClicked()">
+    Start Machine
+  </button>
+</div>
+<div class="container" *ngIf="isHidden">
   <app-navbar></app-navbar>
-
   <div class="main">
     <router-outlet></router-outlet>
   </div>

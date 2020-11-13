@@ -91,7 +91,7 @@ export class HomeComponent implements OnInit {
           console.log(this.machineState);
           console.log(this.userCoins);
           this.toastr.success(`Succesfuly payment`);
-          this.item = new machineState();
+          this.item = undefined;
           this.items = [];
           this.initialMachineState = this.machineState;
           this.initialUserState = this.userCoins;
@@ -317,7 +317,7 @@ export class HomeComponent implements OnInit {
                 }
               }
             } else {
-              if (largest !== 2) {
+              if (largest !== 2) { 
                 this.items = [
                   { value: largest, coins: this.coins },
                   { value: 2, coins: c },
@@ -373,9 +373,17 @@ export class HomeComponent implements OnInit {
               this.EvenAndOddNumbers(value);
             }
           }
-        }
-      }
+        }      
+      } 
     }
+  if(this.item ==undefined && this.items.length==0){
+      this.machineState2 = this.machineState1.filter(
+        (item) => item.value !== largest
+      ); //eject values ​​that don't have coins
+      this.machineState1 = this.machineState2;
+      this.coins1 = 0;
+    this.EvenAndOddNumbers(this.values);
+  }
   }
 
   backToAddCoins() {

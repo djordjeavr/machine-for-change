@@ -1,4 +1,4 @@
-<div class="input-group mb-3" *ngIf="!isClicked">
+<div class="input-group mb-3" *ngIf="isClickedButton && !isClicked">
   <input
     type="number"
     [(ngModel)]="minimumValueOfPayment"
@@ -15,14 +15,25 @@
       id="button-addon2"
       (click)="setPaymentOfValue()"
     >
-      Button
+      Set
     </button>
   </div>
 </div>
-<p *ngIf="valueOfPayment !== undefined">
+<p *ngIf="valueOfPayment !== undefined" (click)="EnterValueOfPayment()">
   Value of payment: <span>{{ valueOfPayment }}</span>
 </p>
-<div class="card text-center" style="width: 23rem" *ngIf="!isClicked">
+<span id="message" *ngIf="valueOfPayment !== undefined && !isClicked"
+  >If you want to change the value, click on the payment value!
+</span>
+<button
+  type="button"
+  class="btn btn-primary btn-lg"
+  (click)="EnterValueOfPayment()"
+  *ngIf="!isClickedButton && !isClicked && !valueOfPayment"
+>
+  Enter Value of payment
+</button>
+<div class="card text-center" *ngIf="!isClicked">
   <div class="card-body">
     <h5 class="card-title">ADD COINS</h5>
     <div class="row">

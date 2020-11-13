@@ -21,6 +21,7 @@ export class AddCoinsComponent implements OnInit {
   valueOfPayment: number;
   totalValue: number = 0;
   isClicked: boolean = false;
+  isClickedButton: boolean = false;
   constructor(private store: Store<AppState>, private toastr: ToastrService) {}
 
   ngOnInit(): void {
@@ -42,6 +43,7 @@ export class AddCoinsComponent implements OnInit {
         .select('valueOfPayment')
         .subscribe((state) => (this.valueOfPayment = state));
       this.minimumValueOfPayment = undefined;
+      this.isClickedButton = false;
     }
   }
   addCoins() {
@@ -127,5 +129,11 @@ export class AddCoinsComponent implements OnInit {
     const userCoins = this.userCoins.filter((item1) => item1 !== item);
     this.store.dispatch(new UserCoinsAction.RemoveUserCoins(userCoins));
     this.counterTotalValue();
+  }
+  EnterValueOfPayment() {
+    if (!this.isClicked) {
+      this.isClickedButton = true;
+      this.valueOfPayment = undefined;
+    }
   }
 }

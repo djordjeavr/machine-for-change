@@ -6,7 +6,10 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  title = 'machine-for-change';
-  loggedUser;
+isHidden:boolean=false;
   constructor() {}
+
+  isClicked(){
+   this.isHidden=true;
+  }
 }

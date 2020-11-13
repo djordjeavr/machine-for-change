@@ -2,7 +2,8 @@ $color-1: #d6d6d6;
 .card {
   background: none;
   margin: auto;
-  border-color: $color-1;
+  border: none;
+  width: 23rem !important;
 
   input {
     background: none;
@@ -45,9 +46,10 @@ tr {
   display: none;
 }
 p {
+  cursor: pointer;
   font-size: 20px;
   font-weight: 500;
-  margin-bottom: 10px;
+  margin-bottom: 5px;
   color: white;
   span {
     font-weight: 400;
@@ -62,9 +64,47 @@ i {
   color: red;
   margin-left: 10px;
 }
-@media (max-width: 495px) {
+#message {
+  color: #04c437;
+  font-size: 12px;
+}
+@media (min-width: 376px) and (max-width: 495px) {
   .userCoins {
     width: 350px;
     margin: 20px 8px;
+  }
+}
+.input-group {
+  animation-name: input-group;
+  animation-duration: 5s;
+  animation-fill-mode: forwards;
+  button {
+    font-weight: 700;
+  }
+}
+@keyframes input-group {
+  0% {
+    width: 0%;
+  }
+  100% {
+    width: 100%;
+  }
+}
+@media (min-width: 325px) and (max-width: 375px) {
+  .card {
+    width: 18rem !important;
+  }
+  .userCoins {
+    width: 300px;
+    margin: 20px 0px;
+  }
+}
+@media (max-width: 320px) {
+  .card {
+    width: 15rem !important;
+  }
+  .userCoins {
+    width: 260px;
+    margin: 20px 0px;
   }
 }

@@ -3,3 +3,15 @@
   margin: 0;
   padding: 0;
 }
+.bg-light {
+  background: none !important;
+
+  .nav-link {
+    color: white;
+    font-size: 18px;
+  }
+}
+.navbar-light .navbar-toggler {
+  color: white !important;
+  font-size: 32px;
+}

@@ -2,7 +2,8 @@ $color-1: #d6d6d6;
 .card {
   background: none;
   margin: auto;
-  border-color: $color-1;
+  border: none;
+  width: 23rem !important;
 
   input {
     background: none;
@@ -33,8 +34,27 @@ tr {
   color: white;
 }
 
-@media (max-width: 495px) {
+@media (min-width: 376px) and (max-width: 495px) {
   h2 {
     font-size: 20px;
+  }
+}
+@media (min-width: 325px) and (max-width: 375px) {
+  .card {
+    width: 18rem !important;
+  }
+  h2 {
+    font-size: 20px;
+  }
+}
+@media (max-width: 320px) {
+  .card {
+    width: 15rem !important;
+  }
+  h2 {
+    font-size: 15px;
+  }
+  h5 {
+    font-size: 13px;
   }
 }
