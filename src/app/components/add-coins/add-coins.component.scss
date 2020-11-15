@@ -75,6 +75,7 @@ i {
   }
 }
 .input-group {
+  opacity: 0;
   animation-name: input-group;
   animation-duration: 5s;
   animation-fill-mode: forwards;
@@ -84,10 +85,10 @@ i {
 }
 @keyframes input-group {
   0% {
-    width: 0%;
+    opacity: 0;
   }
   100% {
-    width: 100%;
+    opacity: 1;
   }
 }
 @media (min-width: 325px) and (max-width: 375px) {
